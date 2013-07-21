@@ -164,7 +164,7 @@ CREATE  TABLE IF NOT EXISTS `event_tag` (
   CONSTRAINT `fk_event_tag_tag`
     FOREIGN KEY (`tagID` )
     REFERENCES `tag` (`tagID` )
-    ON DELETE SET NULL
+    ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
