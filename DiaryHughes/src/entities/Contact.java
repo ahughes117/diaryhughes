@@ -1,27 +1,28 @@
-
 package entities;
 
 import java.sql.Timestamp;
 
 /**
  * The Contact Entity Class
- * 
+ *
  * @author alexhughes
  */
 public class Contact extends Entity {
-    
+
     private int contactID = NIL;
+    private int dayID = NIL;
     private String name;
     private String surname;
     private String email;
     private String phone;
     private String picture;
     private String comments;
+    private Timestamp dateCreated;
     private Timestamp dateModified;
 
     /**
      * Full Constructor for fetching contacts
-     * 
+     *
      * @param contactID
      * @param name
      * @param surname
@@ -29,9 +30,10 @@ public class Contact extends Entity {
      * @param phone
      * @param picture
      * @param comments
-     * @param dateModified 
+     * @param dateCreated
+     * @param dateModified
      */
-    public Contact(int contactID, String name, String surname, String email, String phone, String picture, String comments, Timestamp dateModified) {
+    public Contact(int contactID, String name, String surname, String email, String phone, String picture, String comments, Timestamp dateCreated, Timestamp dateModified) {
         this.contactID = contactID;
         this.name = name;
         this.surname = surname;
@@ -39,18 +41,19 @@ public class Contact extends Entity {
         this.phone = phone;
         this.picture = picture;
         this.comments = comments;
+        this.dateCreated = dateCreated;
         this.dateModified = dateModified;
     }
 
     /**
      * Constructor for creating new contact
-     * 
+     *
      * @param name
      * @param surname
      * @param email
      * @param phone
      * @param picture
-     * @param comments 
+     * @param comments
      */
     public Contact(String name, String surname, String email, String phone, String picture, String comments) {
         this.name = name;
@@ -60,9 +63,8 @@ public class Contact extends Entity {
         this.picture = picture;
         this.comments = comments;
     }
-    
+
     public Contact() {
-        
     }
 
     public int getContactID() {
@@ -71,6 +73,14 @@ public class Contact extends Entity {
 
     public void setContactID(int contactID) {
         this.contactID = contactID;
+    }
+
+    public int getDayID() {
+        return dayID;
+    }
+
+    public void setDayID(int dayID) {
+        this.dayID = dayID;
     }
 
     public String getName() {
@@ -119,6 +129,14 @@ public class Contact extends Entity {
 
     public void setComments(String comments) {
         this.comments = comments;
+    }
+
+    public Timestamp getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(Timestamp dateCreated) {
+        this.dateCreated = dateCreated;
     }
 
     public Timestamp getDateModified() {

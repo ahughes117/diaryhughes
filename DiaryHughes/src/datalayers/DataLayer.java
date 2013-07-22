@@ -28,5 +28,5 @@ public abstract class DataLayer {
 
     public abstract void deleteEntity() throws SQLException;
     
-    public abstract ArrayList<Entity> resultSetToEntity(ResultSet aR) throws SQLException;
+    protected abstract ArrayList<Entity> resultSetToEntity(ResultSet aR) throws SQLException;
 }
