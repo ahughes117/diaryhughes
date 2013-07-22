@@ -6,7 +6,7 @@ package entities;
  * 
  * @author alexhughes
  */
-public class MetaTranslation {
+public class MetaTranslation extends Entity {
     
     private String db;
     private String english;
