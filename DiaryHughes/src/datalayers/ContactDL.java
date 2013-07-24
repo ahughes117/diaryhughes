@@ -89,7 +89,7 @@ public class ContactDL extends DataLayer {
         if (con.getDayID() != Entity.NIL) {
             query += " AND dc.dayID = " + con.getDayID();
         }
-        
+
         ResultSet contactR = c.sendQuery(query);
         entities = resultSetToEntity(contactR);
 
@@ -98,22 +98,90 @@ public class ContactDL extends DataLayer {
 
     @Override
     public int insertEntity() throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int id = Entity.NIL;
+        Contact con = (Contact) e;
+
+        String query = ""
+                + "INSERT INTO contact (Name, Surname, Email, Phone, Picture, Comments, DateCreated) VALUES "
+                + "(?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP) ";
+
+        PreparedStatement ps = c.prepareStatement(query);
+
+        ps.setString(1, con.getName());
+        ps.setString(2, con.getSurname());
+        ps.setString(3, con.getEmail());
+        ps.setString(4, con.getPhone());
+        ps.setString(5, con.getPicture());
+        ps.setString(6, con.getComments());
+
+        ps.executeUpdate();
+
+        ResultSet keyR = ps.getGeneratedKeys();
+        while (keyR.next()) {
+            id = keyR.getInt(1);
+        }
+
+        return id;
     }
 
     @Override
     public void updateEntity() throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Contact con = (Contact) e;
+        checkID(con);
+
+        String query = ""
+                + "UPDATE contact "
+                + "SET Name = ?, Surname = ?, Email = ?, Phone = ?, Picture = ?, Comments = ? "
+                + "WHERE contactID = ? ";
+
+        PreparedStatement ps = c.prepareStatement(query);
+
+        ps.setString(1, con.getName());
+        ps.setString(2, con.getSurname());
+        ps.setString(3, con.getEmail());
+        ps.setString(4, con.getPhone());
+        ps.setString(5, con.getPicture());
+        ps.setString(6, con.getComments());
+        ps.setInt(7, con.getContactID());
+
+        ps.executeUpdate();
     }
 
     @Override
     public void deleteEntity() throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Contact con = (Contact) e;
+        checkID(con);
+        
+        String query = ""
+                + "DELETE "
+                + "FROM contact "
+                + "WHERE contactID = ? ";
+        
+        PreparedStatement ps = c.prepareStatement(query);
+        ps.setInt(1, con.getContactID());
+        
+        ps.executeUpdate();
     }
 
     @Override
     protected ArrayList<Entity> resultSetToEntity(ResultSet aR) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ArrayList<Entity> entityL = new ArrayList();
+        Contact con;
+        
+        while(aR.next()) {
+            con = new Contact(
+                    aR.getInt("contactID"),
+                    aR.getString("Name"),
+                    aR.getString("Surname"),
+                    aR.getString("Email"),
+                    aR.getString("Phone"),
+                    aR.getString("Picture"),
+                    aR.getString("Comments"),
+                    aR.getTimestamp("DateCreated"),
+                    aR.getTimestamp("_dateModified"));
+            entityL.add(con);
+        }
+        return entityL;
     }
 
     private void checkID(Contact aContact) throws SQLException {
