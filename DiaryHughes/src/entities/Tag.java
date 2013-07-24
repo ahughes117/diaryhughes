@@ -8,7 +8,7 @@ import java.sql.Timestamp;
  * 
  * @author alexhughes
  */
-public class Tag {
+public class Tag extends Entity {
     
     private int tagID;
     private String name;
