@@ -105,6 +105,9 @@ public class EventDL extends DataLayer {
             query += " AND t.Name LIKE '%" + tag.getName() + "%' ";
         }
 
+        ResultSet eventR = c.sendQuery(query);
+        entities = resultSetToEntity(eventR);
+
         return entities;
     }
 
