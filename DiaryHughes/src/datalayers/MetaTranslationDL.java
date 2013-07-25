@@ -5,6 +5,7 @@ import entities.MetaTranslation;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import sql.Connector;
 
 /**
  * The MetaTranslation Data Layer Class
@@ -12,6 +13,10 @@ import java.util.ArrayList;
  * @author alexhughes
  */
 public class MetaTranslationDL extends DataLayer {
+
+    public MetaTranslationDL(Connector aConnector) {
+        super(aConnector);
+    }
 
     @Override
     public Entity fetchEntity() throws SQLException {
@@ -25,10 +30,10 @@ public class MetaTranslationDL extends DataLayer {
         String query = ""
                 + "SELECT * "
                 + "FROM MetaTranslation ";
-        
+
         ResultSet metaR = c.sendQuery(query);
         entities = resultSetToEntity(metaR);
-        
+
         return entities;
     }
 
@@ -55,13 +60,13 @@ public class MetaTranslationDL extends DataLayer {
     @Override
     protected ArrayList<Entity> resultSetToEntity(ResultSet aR) throws SQLException {
         MetaTranslation mt;
-        
-        while(aR.next()) {
+
+        while (aR.next()) {
             mt = new MetaTranslation(
                     aR.getString("DB"),
                     aR.getString("English"),
                     aR.getString("Greek"));
-            
+
             entities.add(mt);
         }
         return entities;

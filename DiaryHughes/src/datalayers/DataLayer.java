@@ -15,6 +15,15 @@ public abstract class DataLayer {
     protected Connector c;
     protected Entity e;
     protected ArrayList<Entity> entities;
+    
+    public DataLayer(Connector aConnector) {
+        c = aConnector;
+    }
+    
+    public DataLayer(Connector aConnector, Entity anEntity) {
+        c = aConnector;
+        e = anEntity;
+    }
 
     public abstract Entity fetchEntity() throws SQLException;
 

@@ -4,6 +4,7 @@ import entities.Category;
 import entities.Entity;
 import java.sql.*;
 import java.util.ArrayList;
+import sql.Connector;
 
 /**
  * The Category Entity Data Layer Class
@@ -11,6 +12,14 @@ import java.util.ArrayList;
  * @author alexhughes
  */
 public class CategoryDL extends DataLayer {
+
+    public CategoryDL(Connector aConnector) {
+        super(aConnector);
+    }
+
+    public CategoryDL(Connector aConnector, Entity anEntity) {
+        super(aConnector, anEntity);
+    }
 
     @Override
     public Entity fetchEntity() throws SQLException {

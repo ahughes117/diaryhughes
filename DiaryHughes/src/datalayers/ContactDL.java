@@ -4,6 +4,7 @@ import entities.Contact;
 import entities.Entity;
 import java.sql.*;
 import java.util.ArrayList;
+import sql.Connector;
 
 /**
  * The Contact Entity Data Layer Class
@@ -11,6 +12,14 @@ import java.util.ArrayList;
  * @author alexhughes
  */
 public class ContactDL extends DataLayer {
+
+    public ContactDL(Connector aConnector) {
+        super(aConnector);
+    }
+
+    public ContactDL(Connector aConnector, Entity anEntity) {
+        super(aConnector, anEntity);
+    }
 
     @Override
     public Entity fetchEntity() throws SQLException {
@@ -151,15 +160,15 @@ public class ContactDL extends DataLayer {
     public void deleteEntity() throws SQLException {
         Contact con = (Contact) e;
         checkID(con);
-        
+
         String query = ""
                 + "DELETE "
                 + "FROM contact "
                 + "WHERE contactID = ? ";
-        
+
         PreparedStatement ps = c.prepareStatement(query);
         ps.setInt(1, con.getContactID());
-        
+
         ps.executeUpdate();
     }
 
@@ -167,8 +176,8 @@ public class ContactDL extends DataLayer {
     protected ArrayList<Entity> resultSetToEntity(ResultSet aR) throws SQLException {
         ArrayList<Entity> entityL = new ArrayList();
         Contact con;
-        
-        while(aR.next()) {
+
+        while (aR.next()) {
             con = new Contact(
                     aR.getInt("contactID"),
                     aR.getString("Name"),

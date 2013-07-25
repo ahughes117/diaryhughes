@@ -10,17 +10,17 @@ import java.util.ArrayList;
  * 
  * @author alexhughes
  */
-public class Day {
+public class Day extends Entity {
     
-    private int dayID;
+    private int dayID = NIL;
     private Date date;
     private String summary;
-    private int sex;
-    private int work;
-    private int fun;
-    private int special;
-    private int alcohol;
-    private double expenses;
+    private int sex = NIL;
+    private int work = NIL;
+    private int fun = NIL;
+    private int special = NIL;
+    private int alcohol = NIL;
+    private double expenses = NIL;
     private ArrayList<Event> events;
     private ArrayList<Contact> contacts;
     private Timestamp dateCreated;

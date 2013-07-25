@@ -10,11 +10,11 @@ import java.util.ArrayList;
  * 
  * @author alexhughes
  */
-public class Event {
+public class Event extends Entity {
     
-    private int eventID;
-    private int dayID;
-    private int categoryID;
+    private int eventID = NIL;
+    private int dayID = NIL;
+    private int categoryID = NIL;
     private Category category;
     private String desc;
     private Time time;

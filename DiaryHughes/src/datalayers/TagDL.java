@@ -4,6 +4,7 @@ import entities.Entity;
 import entities.Tag;
 import java.sql.*;
 import java.util.ArrayList;
+import sql.Connector;
 
 /**
  * The Tag Entity Data Layer Class
@@ -11,6 +12,14 @@ import java.util.ArrayList;
  * @author alexhughes
  */
 public class TagDL extends DataLayer {
+
+    public TagDL(Connector aConnector) {
+        super(aConnector);
+    }
+
+    public TagDL(Connector aConnector, Entity anEntity) {
+        super(aConnector, anEntity);
+    }
 
     @Override
     public Entity fetchEntity() throws SQLException {
@@ -136,6 +145,31 @@ public class TagDL extends DataLayer {
             entityL.add(tag);
         }
         return entityL;
+    }
+
+    /**
+     * Returns the tags of a particular event
+     * 
+     * @param anEventID
+     * @return
+     * @throws SQLException 
+     */
+    public ArrayList<Entity> getEventTags(int anEventID) throws SQLException {
+        Tag tag;
+
+        String query = ""
+                + "SELECT * "
+                + "FROM tag t "
+                + "INNER JOIN event_tag et ON et.tagID = t.tagID "
+                + "WHERE et.eventID = ? ";
+
+        PreparedStatement ps = c.prepareStatement(query);
+        ps.setInt(1, anEventID);
+
+        ResultSet tagR = ps.executeQuery();
+        entities = resultSetToEntity(tagR);
+
+        return entities;
     }
 
     private void checkID(Tag aTag) throws SQLException {
