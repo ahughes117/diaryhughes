@@ -118,12 +118,12 @@ public class DayDL extends DataLayer {
             double ceil = d.getExpenses() + 10;
             query += " AND d.Expenses BETWEEN " + floor + " AND " + ceil;
         }
-        
-        if(d.getDateCreated() != null) {
+
+        if (d.getDateCreated() != null) {
             query += " AND DateCreated LIKE '" + d.getDateCreated().toString() + "%' ";
         }
-        
-        if(d.getDateModified() != null) {
+
+        if (d.getDateModified() != null) {
             query += " AND _dateModified LIKE '" + d.getDateModified().toString() + "%' ";
         }
 
@@ -200,8 +200,15 @@ public class DayDL extends DataLayer {
 
         String query = ""
                 + "UPDATE day SET "
-                + "Date = ?, "
-                + ""
+                + "Date = ? ,"
+                + "Summary = ? ,"
+                + "Sex = ? ,"
+                + "Work = ? ,"
+                + "Fun = ? ,"
+                + "Special = ? ,"
+                + "Alcohol = ? ,"
+                + "Expenses = ? ,"
+                + "WHERE dayID = ? ";
     }
 
     @Override
