@@ -203,7 +203,7 @@ public class EventDL extends DataLayer {
 
     public void insertTags(int eventID, ArrayList<Tag> tags) throws SQLException {
         String query = ""
-                + "INSERT INTO event_tag (eventID, tagID) VALUES "
+                + "INSERT IGNORE INTO event_tag (eventID, tagID) VALUES "
                 + "(?, ?) ";
 
         for (Tag t : tags) {

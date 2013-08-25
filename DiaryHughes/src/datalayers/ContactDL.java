@@ -56,7 +56,7 @@ public class ContactDL extends DataLayer {
 
     public ArrayList<Contact> getDayContacts(int aDayID) throws SQLException {
         ArrayList<Contact> contactL = new ArrayList();
-        Contact con = (Contact) e;
+        Contact con = new Contact();
         con.setDayID(aDayID);
 
         ArrayList<Entity> entityL = searchEntity();
