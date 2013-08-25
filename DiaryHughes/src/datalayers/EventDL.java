@@ -113,25 +113,117 @@ public class EventDL extends DataLayer {
 
     @Override
     public int insertEntity() throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int id = Entity.NIL;
+        Event ev = (Event) e;
+
+        String query = ""
+                + "INSERT INTO event (dayID, categoryID, Description, Time, Picture) VALUES "
+                + "(?, ?, ?, ?, ?) ";
+
+        PreparedStatement ps = c.prepareStatement(query);
+
+        ps.setInt(1, ev.getDayID());
+        ps.setInt(2, ev.getCategoryID());
+        ps.setString(3, ev.getDesc());
+        ps.setTime(4, ev.getTime());
+        ps.setString(5, ev.getPicture());
+
+        ps.executeUpdate();
+
+        ResultSet keyR = ps.getGeneratedKeys();
+        while (keyR.next()) {
+            id = keyR.getInt(1);
+        }
+
+        //inserting tags
+        insertTags(id, ev.getTags());
+
+        return id;
     }
 
     @Override
     public void updateEntity() throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        checkID(e);
+        Event ev = (Event) e;
+
+        String query = ""
+                + "UPDATE event SET "
+                + "dayID = ? ,"
+                + "categoryID = ? ,"
+                + "Description = ? ,"
+                + "Time = ? ,"
+                + "Picture = ? "
+                + "WHERE eventID = ? ";
+
+        PreparedStatement ps = c.prepareStatement(query);
+
+        ps.setInt(1, ev.getDayID());
+        ps.setInt(2, ev.getCategoryID());
+        ps.setString(3, ev.getDesc());
+        ps.setTime(4, ev.getTime());
+        ps.setString(5, ev.getPicture());
+        ps.setInt(6, ev.getEventID());
+
+        ps.executeUpdate();
+
+        //inserting tags
+        insertTags(ev.getEventID(), ev.getTags());
     }
 
     @Override
     public void deleteEntity() throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        checkID(e);
+        Event ev = (Event) e;
+
+        String query = ""
+                + "DELETE "
+                + "FROM event "
+                + "WHERE eventID = ? ";
+
+        PreparedStatement ps = c.prepareStatement(query);
+        ps.setInt(1, ev.getEventID());
+
+        ps.executeUpdate();
     }
 
     @Override
     protected ArrayList<Entity> resultSetToEntity(ResultSet aR) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ArrayList<Entity> entityL = new ArrayList();
+        Event ev;
+
+        while (aR.next()) {
+            ev = new Event(
+                    aR.getInt("eventID"),
+                    aR.getInt("dayID"),
+                    aR.getInt("categoryID"),
+                    aR.getString("Description"),
+                    aR.getTime("Time"),
+                    aR.getString("Picture"),
+                    aR.getTimestamp("_dateModified"));
+            entityL.add(ev);
+        }
+        return entityL;
+    }
+
+    public void insertTags(int eventID, ArrayList<Tag> tags) throws SQLException {
+        String query = ""
+                + "INSERT INTO event_tag (eventID, tagID) VALUES "
+                + "(?, ?) ";
+
+        for (Tag t : tags) {
+            PreparedStatement ps = c.prepareStatement(query);
+
+            ps.setInt(1, eventID);
+            ps.setInt(2, t.getTagID());
+
+            ps.executeUpdate();
+        }
     }
 
     private void checkID(Entity anEntity) throws SQLException {
-        throw new SQLException();
+        Event ev = (Event) anEntity;
+        if (ev.getEventID() == Entity.NIL) {
+            throw new SQLException();
+        }
     }
 }
