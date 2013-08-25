@@ -45,13 +45,8 @@ public class EventDL extends DataLayer {
         ResultSet eventR = ps.executeQuery();
         e = resultSetToEntity(eventR).get(0);
 
-        //it is a very stupid way to do it, but is giving spaghetti code and headache otherwise
-        ArrayList<Entity> tagEL = tagDL.getEventTags(event.getEventID());
-        ArrayList<Tag> tagL = new ArrayList();
-
-        for (Entity entity : tagEL) {
-            tagL.add((Tag) entity);
-        }
+        //getting correlated objects
+        ArrayList<Tag> tagL = tagDL.getEventTags(event.getEventID());
 
         ((Event) e).setTags(tagL);
 
@@ -82,7 +77,6 @@ public class EventDL extends DataLayer {
                 + "INNER JOIN category c ON e.categoryID = c.categoryID "
                 + "INNER JOIN event_tag et ON et.eventID = e.eventID "
                 + "INNER JOIN tag t ON et.tagID = t.tagID "
-                + "GROUP BY e.eventID "
                 + "WHERE 1=1 ";
 
         if (event.getCategory().getName() != null && !event.getCategory().getName().equals("")) {
@@ -104,6 +98,8 @@ public class EventDL extends DataLayer {
         if (tag.getName() != null && !tag.getName().equals("")) {
             query += " AND t.Name LIKE '%" + tag.getName() + "%' ";
         }
+        
+        query += " GROUP BY e.eventID ";
 
         ResultSet eventR = c.sendQuery(query);
         entities = resultSetToEntity(eventR);
@@ -218,6 +214,21 @@ public class EventDL extends DataLayer {
 
             ps.executeUpdate();
         }
+    }
+
+    public ArrayList<Event> getDayEvents(int aDayID) throws SQLException {
+        ArrayList<Event> eventL = new ArrayList();
+        Event ev = new Event();
+        ev.setDayID(aDayID);
+
+        ArrayList<Entity> entityL = searchEntity();
+
+        //stupid but the only easy way to do it
+        for (Entity ent : entityL) {
+            eventL.add((Event) ent);
+        }
+
+        return eventL;
     }
 
     private void checkID(Entity anEntity) throws SQLException {

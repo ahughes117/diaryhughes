@@ -54,11 +54,19 @@ public class ContactDL extends DataLayer {
         return entities;
     }
 
-    public ArrayList<Entity> getDayContacts(int aDayID) throws SQLException {
+    public ArrayList<Contact> getDayContacts(int aDayID) throws SQLException {
+        ArrayList<Contact> contactL = new ArrayList();
         Contact con = (Contact) e;
         con.setDayID(aDayID);
 
-        return searchEntity();
+        ArrayList<Entity> entityL = searchEntity();
+
+        //stupid but the only easy way to do it
+        for (Entity ent : entityL) {
+            contactL.add((Contact) e);
+        }
+
+        return contactL;
     }
 
     @Override
