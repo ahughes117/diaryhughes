@@ -13,7 +13,6 @@ import sql.Connector;
  */
 public abstract class GUI extends JFrame {
     
-    protected static boolean instanceAlive;
     protected GUI pFrame;
     protected Connector c;
     protected int id;
@@ -25,7 +24,6 @@ public abstract class GUI extends JFrame {
     }
     
     public GUI(GUI aPreviousFrame, Connector aConnector, int anID) {
-        instanceAlive = true;
         pFrame = aPreviousFrame;
         c = aConnector;
         id = anID;
@@ -49,7 +47,6 @@ public abstract class GUI extends JFrame {
     }
     
     protected void shutdown() {
-        instanceAlive = false;
         pFrame.setVisible(true);
         this.dispose();
     }

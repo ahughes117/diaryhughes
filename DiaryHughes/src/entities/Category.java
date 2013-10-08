@@ -32,6 +32,10 @@ public class Category extends Entity {
         this.dateCreated = dateCreated;
         this.dateModified = dateModified;
     }
+    
+    public Category() {
+        
+    }
 
     public int getCategoryID() {
         return categoryID;

@@ -1,11 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package diaryhughes;
 
 /**
- *
+ * The main class that launches the GUI
+ * 
  * @author Alex Hughes <alexhughes117@gmail.com>
  */
 public class Main {
