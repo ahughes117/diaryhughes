@@ -56,6 +56,37 @@ public class DayDL extends DataLayer {
 
         return e;
     }
+    
+    /**
+     * Fetches and returns a particular day by it's date.
+     * 
+     * @param aDate
+     * @return
+     * @throws SQLException 
+     */
+    public Day fetchDayByDate(String aDate) throws SQLException {
+        Day d;
+        
+        String query = ""
+                + "SELECT * "
+                + "FROM day "
+                + "WHERE Date = ? ";
+        
+        PreparedStatement ps = c.prepareStatement(query);
+        ps.setString(1, aDate);
+        
+        ResultSet dayR = ps.executeQuery();
+        d = (Day)resultSetToEntity(dayR).get(0);
+        
+        //getting correlated objects
+        ArrayList<Contact> contactL = contactDL.getDayContacts(d.getDayID());
+        d.setContacts(contactL);
+
+        ArrayList<Event> eventL = eventDL.getDayEvents(d.getDayID());
+        d.setEvents(eventL);
+        
+        return d;
+    }
 
     @Override
     public ArrayList<Entity> fetchEntities(String aSorting) throws SQLException {
