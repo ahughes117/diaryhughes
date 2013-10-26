@@ -98,7 +98,7 @@ public class EventDL extends DataLayer {
         if (tag.getName() != null && !tag.getName().equals("")) {
             query += " AND t.Name LIKE '%" + tag.getName() + "%' ";
         }
-        
+
         query += " GROUP BY e.eventID ";
 
         ResultSet eventR = c.sendQuery(query);
@@ -113,16 +113,17 @@ public class EventDL extends DataLayer {
         Event ev = (Event) e;
 
         String query = ""
-                + "INSERT INTO event (dayID, categoryID, Description, Time, Picture) VALUES "
-                + "(?, ?, ?, ?, ?) ";
+                + "INSERT INTO event (dayID, categoryID, Description, Time, Picture, DateCreated) VALUES "
+                + "(?, ?, ?, ?, ?, CURRENT_TIMESTAMP) ";
 
         PreparedStatement ps = c.prepareStatement(query);
 
         ps.setInt(1, ev.getDayID());
         ps.setInt(2, ev.getCategoryID());
-        ps.setString(3, ev.getDesc());
-        ps.setTime(4, ev.getTime());
-        ps.setString(5, ev.getPicture());
+        ps.setString(3, ev.getName());
+        ps.setString(4, ev.getDesc());
+        ps.setTime(5, ev.getTime());
+        ps.setString(6, ev.getPicture());
 
         ps.executeUpdate();
 
@@ -146,6 +147,7 @@ public class EventDL extends DataLayer {
                 + "UPDATE event SET "
                 + "dayID = ? ,"
                 + "categoryID = ? ,"
+                + "Name = ? ,"
                 + "Description = ? ,"
                 + "Time = ? ,"
                 + "Picture = ? "
@@ -155,10 +157,11 @@ public class EventDL extends DataLayer {
 
         ps.setInt(1, ev.getDayID());
         ps.setInt(2, ev.getCategoryID());
-        ps.setString(3, ev.getDesc());
-        ps.setTime(4, ev.getTime());
-        ps.setString(5, ev.getPicture());
-        ps.setInt(6, ev.getEventID());
+        ps.setString(3, ev.getName());
+        ps.setString(4, ev.getDesc());
+        ps.setTime(5, ev.getTime());
+        ps.setString(6, ev.getPicture());
+        ps.setInt(7, ev.getEventID());
 
         ps.executeUpdate();
 
@@ -192,9 +195,11 @@ public class EventDL extends DataLayer {
                     aR.getInt("eventID"),
                     aR.getInt("dayID"),
                     aR.getInt("categoryID"),
+                    aR.getString("Name"),
                     aR.getString("Description"),
                     aR.getTime("Time"),
                     aR.getString("Picture"),
+                    aR.getTimestamp("DateCreated"),
                     aR.getTimestamp("_dateModified"));
             entityL.add(ev);
         }

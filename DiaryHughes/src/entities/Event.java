@@ -16,10 +16,12 @@ public class Event extends Entity {
     private int dayID = NIL;
     private int categoryID = NIL;
     private Category category;
+    private String name;
     private String desc;
     private Time time;
     private String picture;
     private ArrayList<Tag> tags;
+    private Timestamp dateCreated;
     private Timestamp dateModified;
 
     /**
@@ -33,13 +35,15 @@ public class Event extends Entity {
      * @param picture
      * @param dateModified 
      */
-    public Event(int eventID, int dayID, int categoryID, String desc, Time time, String picture, Timestamp dateModified) {
+    public Event(int eventID, int dayID, int categoryID, String name, String desc, Time time, String picture, Timestamp dateCreated, Timestamp dateModified) {
         this.eventID = eventID;
         this.dayID = dayID;
         this.categoryID = categoryID;
+        this.name = name;
         this.desc = desc;
         this.time = time;
         this.picture = picture;
+        this.dateCreated = dateCreated;
         this.dateModified = dateModified;
     }
 
@@ -52,9 +56,10 @@ public class Event extends Entity {
      * @param time
      * @param picture 
      */
-    public Event(int dayID, int categoryID, String desc, Time time, String picture) {
+    public Event(int dayID, int categoryID, String name, String desc, Time time, String picture) {
         this.dayID = dayID;
         this.categoryID = categoryID;
+        this.name = name;
         this.desc = desc;
         this.time = time;
         this.picture = picture;
@@ -99,6 +104,14 @@ public class Event extends Entity {
         this.category = category;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String desc) {
+        this.name = desc;
+    }
+
     public String getDesc() {
         return desc;
     }
@@ -121,6 +134,14 @@ public class Event extends Entity {
 
     public void setPicture(String picture) {
         this.picture = picture;
+    }
+
+    public Timestamp getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(Timestamp DateCreated) {
+        this.dateCreated = DateCreated;
     }
 
     public Timestamp getDateModified() {

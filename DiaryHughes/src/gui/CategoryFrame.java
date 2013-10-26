@@ -38,6 +38,8 @@ public class CategoryFrame extends GUI {
 
         if (anID != NIL) {
             try {
+                cat = new Category();
+                cat.setCategoryID(anID);
                 loadCategory();
             } catch (SQLException ex) {
                 MesDial.conError(this);
@@ -47,21 +49,62 @@ public class CategoryFrame extends GUI {
             existing = true;
         } else {
             existing = false;
+            statusL.setText("New Category");
         }
 
         super.setFrameLocationCenter();
         this.setVisible(true);
     }
 
+    /**
+     * Parses a Category's details from the fields.
+     *
+     * @return
+     */
     private Category parseCategory() {
         cat = new Category();
+
+        cat.setName(nameF.getText());
+        cat.setDesc(descArea.getText());
+
         return cat;
     }
 
+    /**
+     * Loads a category and fills the fields
+     *
+     * @throws SQLException
+     */
     private void loadCategory() throws SQLException {
+        catDL = new CategoryDL(c, cat);
+        cat = (Category) catDL.fetchEntity();
+
+        nameF.setText(cat.getName());
+        descArea.setText(cat.getDesc());
+
+        if (cat.getDateCreated().equals(cat.getDateCreated())) {
+            statusL.setText("Date Created: " + cat.getDateCreated().toString());
+        } else {
+            statusL.setText("DateCreated: " + cat.getDateCreated().toString()
+                    + " || Date Modified: " + cat.getDateModified().toString());
+        }
     }
 
+    /**
+     * Saves a category
+     *
+     * @throws SQLException
+     */
     private void save() throws SQLException {
+        parseCategory();
+        catDL = new CategoryDL(c, cat);
+
+        if (!existing) {
+            catDL.insertEntity();
+            existing = true;
+        } else {
+            catDL.updateEntity();
+        }
     }
 
     public static boolean isInstanceAlive() {
@@ -87,7 +130,7 @@ public class CategoryFrame extends GUI {
         jLabel1 = new javax.swing.JLabel();
         nameF = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        descF = new javax.swing.JTextArea();
+        descArea = new javax.swing.JTextArea();
         jPanel2 = new javax.swing.JPanel();
         statusL = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
@@ -103,9 +146,9 @@ public class CategoryFrame extends GUI {
 
         jScrollPane1.setBorder(javax.swing.BorderFactory.createTitledBorder("Description"));
 
-        descF.setColumns(20);
-        descF.setRows(5);
-        jScrollPane1.setViewportView(descF);
+        descArea.setColumns(20);
+        descArea.setRows(5);
+        jScrollPane1.setViewportView(descArea);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -208,7 +251,7 @@ public class CategoryFrame extends GUI {
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton backBtn;
-    private javax.swing.JTextArea descF;
+    private javax.swing.JTextArea descArea;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

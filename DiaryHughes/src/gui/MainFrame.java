@@ -118,15 +118,15 @@ public class MainFrame extends GUI {
         jPanel6 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         eventL = new javax.swing.JList();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        newEvBtn = new javax.swing.JButton();
+        editEvBtn = new javax.swing.JButton();
+        deleteEvBtn = new javax.swing.JButton();
         jPanel7 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         contactL = new javax.swing.JList();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
+        newConBtn = new javax.swing.JButton();
+        editConBtn = new javax.swing.JButton();
+        deleteConBtn = new javax.swing.JButton();
         jPanel8 = new javax.swing.JPanel();
         dateL = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -164,11 +164,11 @@ public class MainFrame extends GUI {
         eventL.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane2.setViewportView(eventL);
 
-        jButton1.setText("New");
+        newEvBtn.setText("New");
 
-        jButton2.setText("Edit");
+        editEvBtn.setText("Edit");
 
-        jButton3.setText("Delete");
+        deleteEvBtn.setText("Delete");
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -179,11 +179,11 @@ public class MainFrame extends GUI {
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2)
                     .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(newEvBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(editEvBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(deleteEvBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -193,20 +193,20 @@ public class MainFrame extends GUI {
                 .addComponent(jScrollPane2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3)))
+                    .addComponent(newEvBtn)
+                    .addComponent(editEvBtn)
+                    .addComponent(deleteEvBtn)))
         );
 
         jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder("Contacts"));
 
         jScrollPane3.setViewportView(contactL);
 
-        jButton4.setText("New");
+        newConBtn.setText("New");
 
-        jButton5.setText("Edit");
+        editConBtn.setText("Edit");
 
-        jButton6.setText("Delete");
+        deleteConBtn.setText("Delete");
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -217,11 +217,11 @@ public class MainFrame extends GUI {
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)
                     .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(newConBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(editConBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(deleteConBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -232,9 +232,9 @@ public class MainFrame extends GUI {
                 .addComponent(jScrollPane3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton4)
-                    .addComponent(jButton5)
-                    .addComponent(jButton6)))
+                    .addComponent(newConBtn)
+                    .addComponent(editConBtn)
+                    .addComponent(deleteConBtn)))
         );
 
         jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder("Details"));
@@ -506,15 +506,13 @@ public class MainFrame extends GUI {
     private javax.swing.JButton clearBtn3;
     private javax.swing.JList contactL;
     private javax.swing.JLabel dateL;
+    private javax.swing.JButton deleteConBtn;
+    private javax.swing.JButton deleteEvBtn;
+    private javax.swing.JButton editConBtn;
+    private javax.swing.JButton editEvBtn;
     private javax.swing.JList eventL;
     private javax.swing.JTextField expensesF;
     private javax.swing.JCheckBox funChk;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
@@ -533,6 +531,8 @@ public class MainFrame extends GUI {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JButton newConBtn;
+    private javax.swing.JButton newEvBtn;
     private javax.swing.JCheckBox practiceChk;
     private javax.swing.JButton quitBtn;
     private javax.swing.JButton saveBtn;

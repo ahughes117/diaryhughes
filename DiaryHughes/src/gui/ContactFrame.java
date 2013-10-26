@@ -38,6 +38,8 @@ public class ContactFrame extends GUI {
 
         if (anID != NIL) {
             try {
+                contact = new Contact();
+                contact.setContactID(anID);
                 loadContact();
             } catch (SQLException ex) {
                 MesDial.conError(this);
@@ -47,21 +49,68 @@ public class ContactFrame extends GUI {
             existing = true;
         } else {
             existing = false;
+            statusL.setText("New Contact");
         }
 
         super.setFrameLocationCenter();
         this.setVisible(true);
     }
 
+    /**
+     * Parses a Contact's details from the fields
+     *
+     * @return
+     */
     private Contact parseContact() {
         contact = new Contact();
+
+        contact.setName(nameF.getText());
+        contact.setSurname(surnameF.getText());
+        contact.setEmail(emailF.getText());
+        contact.setPhone(phoneF.getText());
+        contact.setComments(commentArea.getText());
+
         return contact;
     }
 
+    /**
+     * Loads a contact and fills the fields
+     *
+     * @throws SQLException
+     */
     private void loadContact() throws SQLException {
+        conDL = new ContactDL(c, contact);
+        contact = (Contact) conDL.fetchEntity();
+        
+        nameF.setText(contact.getName());
+        surnameF.setText(contact.getSurname());
+        emailF.setText(contact.getEmail());
+        phoneF.setText(contact.getPhone());
+        commentArea.setText(contact.getComments());
+
+        if (contact.getDateCreated().equals(contact.getDateModified())) {
+            statusL.setText("Date Created: " + contact.getDateCreated().toString());
+        } else {
+            statusL.setText("Date Created: " + contact.getDateCreated().toString()
+                    + " || Date Modified: " + contact.getDateModified().toString());
+        }
     }
 
+    /**
+     * Saves a contact.
+     * 
+     * @throws SQLException 
+     */
     private void save() throws SQLException {
+        parseContact();
+        conDL = new ContactDL(c, contact);
+
+        if (!existing) {
+            conDL.insertEntity();
+            existing = true;
+        } else {
+            conDL.updateEntity();
+        }
     }
 
     public static boolean isInstanceAlive() {
@@ -168,8 +217,18 @@ public class ContactFrame extends GUI {
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         backBtn.setText("<Back");
+        backBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backBtnActionPerformed(evt);
+            }
+        });
 
         okBtn.setText("OK");
+        okBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                okBtnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -238,6 +297,22 @@ public class ContactFrame extends GUI {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
+        shutdown();
+    }//GEN-LAST:event_backBtnActionPerformed
+
+    private void okBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okBtnActionPerformed
+        try {
+            save();
+            MesDial.saveSuccess(this);
+            shutdown();
+        } catch (SQLException ex) {
+            MesDial.conError(this);
+            Logger.getLogger(ContactFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_okBtnActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton backBtn;
     private javax.swing.JTextArea commentArea;

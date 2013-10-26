@@ -37,6 +37,26 @@ public class Category extends Entity {
         
     }
 
+    public void setCategoryID(int categoryID) {
+        this.categoryID = categoryID;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
+    public void setDateCreated(Timestamp dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+
+    public void setDateModified(Timestamp dateModified) {
+        this.dateModified = dateModified;
+    }
+
     public int getCategoryID() {
         return categoryID;
     }
