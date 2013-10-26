@@ -66,13 +66,13 @@ public class LoginFrame extends GUI {
         schemaField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("MI6 Tracker ");
+        setTitle("DiaryHughes");
         setMinimumSize(new java.awt.Dimension(428, 280));
         setName("LoginFrame"); // NOI18N
 
         StatusPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        jLabel1.setText("MI6 Tracker. Developed by Alex Hughes <ahughes@ahughes.org>");
+        jLabel1.setText("DiaryHughes. Developed by Alex Hughes <ahughes@ahughes.org>");
 
         javax.swing.GroupLayout StatusPanelLayout = new javax.swing.GroupLayout(StatusPanel);
         StatusPanel.setLayout(StatusPanelLayout);
