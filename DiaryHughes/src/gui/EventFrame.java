@@ -1,4 +1,3 @@
-
 package gui;
 
 import datalayers.EventDL;
@@ -11,10 +10,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import sql.Connector;
 import util.MesDial;
+import util.StrVal;
 
 /**
  * Event Frame. CRUD for Event Entity
- * 
+ *
  * @author alexhughes
  */
 public class EventFrame extends GUI {
@@ -22,22 +22,22 @@ public class EventFrame extends GUI {
     private static boolean instanceAlive = false;
     private Event e;
     private EventDL eDL;
-    
+
     /**
      * Constructor for EventFrame
      */
     public EventFrame(GUI aPFrame, Connector aConnector, int anID) {
         super(aPFrame, aConnector, anID);
         instanceAlive = true;
-        
+
         initComponents();
         this.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 shutdown();
             }
         });
-        
-        if(anID != NIL) {
+
+        if (anID != NIL) {
             try {
                 e = new Event();
                 e.setEventID(anID);
@@ -52,55 +52,63 @@ public class EventFrame extends GUI {
             existing = false;
             statusL.setText("New Event");
         }
-        
+
         super.setFrameLocationCenter();
         this.setVisible(true);
     }
-    
-    private Event parseEvent() {
+
+    private boolean parseEvent() {
+        boolean parsingSuccessful = true;
+
         e = new Event();
-        
+
         e.setName(nameF.getText());
         e.setDesc(descArea.getText());
-        e.setTime(Time.valueOf(timeF.getText()));
-        
-        return e;
+        try {
+            e.setTime(StrVal.timeParser(timeF.getText()));
+        } catch (Exception ex) {
+            parsingSuccessful = false;
+            MesDial.timeError(this);
+            Logger.getLogger(EventFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return parsingSuccessful;
     }
-    
+
     private void loadEvent() throws SQLException {
         eDL = new EventDL(c, e);
-        e = (Event)eDL.fetchEntity();
-        
+        e = (Event) eDL.fetchEntity();
+
         nameF.setText(e.getName());
         timeF.setText(e.getTime().toString());
         descArea.setText(e.getDesc());
-        
+
         if (e.getDateCreated().equals(e.getDateModified())) {
             statusL.setText("Date Created: " + e.getDateCreated().toString());
         } else {
             statusL.setText("Date Created: " + e.getDateCreated().toString()
                     + " || Date Modified: " + e.getDateModified().toString());
         }
-        
+
     }
-    
+
     private void save() throws SQLException {
-        parseEvent();
-        eDL = new EventDL(c, e);
-        
-        if(!existing) {
-            eDL.insertEntity();
-            existing = true;
-        } else {
-            eDL.updateEntity();
+        if (parseEvent()) {
+            eDL = new EventDL(c, e);
+
+            if (!existing) {
+                eDL.insertEntity();
+                existing = true;
+            } else {
+                eDL.updateEntity();
+            }
         }
-        
     }
-    
+
     public static boolean isInstanceAlive() {
         return instanceAlive;
     }
-    
+
     @Override
     protected void shutdown() {
         instanceAlive = false;
@@ -367,8 +375,6 @@ public class EventFrame extends GUI {
             Logger.getLogger(EventFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_okBtnActionPerformed
-
-    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton backBtn;
     private javax.swing.JComboBox catCombo;

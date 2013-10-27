@@ -61,7 +61,9 @@ public class ContactFrame extends GUI {
      *
      * @return
      */
-    private Contact parseContact() {
+    private boolean parseContact() {
+        boolean parsingSuccessful = true;
+
         contact = new Contact();
 
         contact.setName(nameF.getText());
@@ -70,7 +72,7 @@ public class ContactFrame extends GUI {
         contact.setPhone(phoneF.getText());
         contact.setComments(commentArea.getText());
 
-        return contact;
+        return parsingSuccessful;
     }
 
     /**
@@ -81,7 +83,7 @@ public class ContactFrame extends GUI {
     private void loadContact() throws SQLException {
         conDL = new ContactDL(c, contact);
         contact = (Contact) conDL.fetchEntity();
-        
+
         nameF.setText(contact.getName());
         surnameF.setText(contact.getSurname());
         emailF.setText(contact.getEmail());
@@ -98,18 +100,19 @@ public class ContactFrame extends GUI {
 
     /**
      * Saves a contact.
-     * 
-     * @throws SQLException 
+     *
+     * @throws SQLException
      */
     private void save() throws SQLException {
-        parseContact();
-        conDL = new ContactDL(c, contact);
+        if (parseContact()) {
+            conDL = new ContactDL(c, contact);
 
-        if (!existing) {
-            conDL.insertEntity();
-            existing = true;
-        } else {
-            conDL.updateEntity();
+            if (!existing) {
+                conDL.insertEntity();
+                existing = true;
+            } else {
+                conDL.updateEntity();
+            }
         }
     }
 
@@ -312,7 +315,6 @@ public class ContactFrame extends GUI {
             Logger.getLogger(ContactFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_okBtnActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton backBtn;
     private javax.swing.JTextArea commentArea;

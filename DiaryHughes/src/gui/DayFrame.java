@@ -6,11 +6,15 @@ import entities.Day;
 import static gui.GUI.NIL;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Date;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import sql.Connector;
 import util.MesDial;
+import util.StrVal;
 
 /**
  * Day Frame. CRUD for Day Entity
@@ -48,15 +52,67 @@ public class DayFrame extends GUI {
             existing = true;
         } else {
             existing = false;
+            statusL.setText("New Day");
         }
         
         super.setFrameLocationCenter();
         this.setVisible(true);
     }
     
-    private Day parseDay() {
+    private boolean parseDay() {
+        boolean parsingSuccessful = true;
         d = new Day();
-        return d;
+        
+        try {
+            d.setDate(StrVal.dateParser(dateF.getText()));
+        } catch (Exception ex) {
+            parsingSuccessful = false;
+            MesDial.dateError(this);
+            Logger.getLogger(DayFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        try {
+            d.setExpenses(Double.valueOf(expensesF.getText()));
+        } catch(Exception x) {
+            parsingSuccessful = false;
+            MesDial.doubleError(this);
+            Logger.getLogger(DayFrame.class.getName()).log(Level.SEVERE, null, x);
+        }
+        
+        d.setSummary(summaryArea.getText());
+        
+        if(sexChk.isSelected())
+            d.setSex(1);
+        else
+            d.setSex(0);
+        
+        if(workChk.isSelected())
+            d.setWork(1);
+        else
+            d.setWork(0);
+        
+        if(funChk.isSelected())
+            d.setFun(1);
+        else
+            d.setFun(0);
+        
+        if(specialChk.isSelected())
+            d.setSpecial(1);
+        else
+            d.setSpecial(0);
+        
+        if(alcoholChk.isSelected())
+            d.setAlcohol(1);
+        else
+            d.setAlcohol(0);
+        
+        if(practiceChk.isSelected())
+            d.setPractice(1);
+        else
+            d.setPractice(0);
+        
+        
+        return parsingSuccessful;
     }
     
     private void loadDay () throws SQLException {

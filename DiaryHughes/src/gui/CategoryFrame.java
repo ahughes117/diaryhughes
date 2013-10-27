@@ -61,13 +61,14 @@ public class CategoryFrame extends GUI {
      *
      * @return
      */
-    private Category parseCategory() {
+    private boolean parseCategory() {
+        boolean parsingSuccessful = true;
         cat = new Category();
 
         cat.setName(nameF.getText());
         cat.setDesc(descArea.getText());
 
-        return cat;
+        return parsingSuccessful;
     }
 
     /**
@@ -96,14 +97,15 @@ public class CategoryFrame extends GUI {
      * @throws SQLException
      */
     private void save() throws SQLException {
-        parseCategory();
-        catDL = new CategoryDL(c, cat);
+        if (parseCategory()) {
+            catDL = new CategoryDL(c, cat);
 
-        if (!existing) {
-            catDL.insertEntity();
-            existing = true;
-        } else {
-            catDL.updateEntity();
+            if (!existing) {
+                catDL.insertEntity();
+                existing = true;
+            } else {
+                catDL.updateEntity();
+            }
         }
     }
 

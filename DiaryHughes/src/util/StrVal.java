@@ -2,6 +2,7 @@ package util;
 
 import java.security.MessageDigest;
 import java.sql.Date;
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -157,6 +158,19 @@ public class StrVal {
         java.util.Date utilDate = new SimpleDateFormat("dd/MM/yyyy").parse(aDate);
         java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
         return sqlDate;
+    }
+    
+    /**
+     * Gets a user friendly time format and returns a time object
+     * 
+     * @param aTime
+     * @return
+     * @throws Exception 
+     */
+    public static Time timeParser(String aTime) throws Exception {
+        java.util.Date utilTime = new SimpleDateFormat("HH:mm").parse(aTime);
+        java.sql.Time sqlTime = new java.sql.Time(utilTime.getTime());
+        return sqlTime;
     }
     
     /**

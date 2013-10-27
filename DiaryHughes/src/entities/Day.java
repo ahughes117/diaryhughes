@@ -20,6 +20,7 @@ public class Day extends Entity {
     private int fun = NIL;
     private int special = NIL;
     private int alcohol = NIL;
+    private int practice = NIL;
     private double expenses = NIL;
     private ArrayList<Event> events;
     private ArrayList<Contact> contacts;
@@ -41,7 +42,7 @@ public class Day extends Entity {
      * @param dateCreated
      * @param dateModified 
      */
-    public Day(int dayID, Date date, String summary, int sex, int work, int fun, int special, int alcohol, double expenses, Timestamp dateCreated, Timestamp dateModified) {
+    public Day(int dayID, Date date, String summary, int sex, int work, int fun, int special, int alcohol, int practice, double expenses, Timestamp dateCreated, Timestamp dateModified) {
         this.dayID = dayID;
         this.date = date;
         this.summary = summary;
@@ -50,6 +51,7 @@ public class Day extends Entity {
         this.fun = fun;
         this.special = special;
         this.alcohol = alcohol;
+        this.practice = practice;
         this.expenses = expenses;
         this.dateCreated = dateCreated;
         this.dateModified = dateModified;
@@ -67,7 +69,7 @@ public class Day extends Entity {
      * @param alcohol
      * @param expenses 
      */
-    public Day(Date date, String summary, int sex, int work, int fun, int special, int alcohol, double expenses) {
+    public Day(Date date, String summary, int sex, int work, int fun, int special, int alcohol, int practice, double expenses) {
         this.date = date;
         this.summary = summary;
         this.sex = sex;
@@ -75,6 +77,7 @@ public class Day extends Entity {
         this.fun = fun;
         this.special = special;
         this.alcohol = alcohol;
+        this.practice = practice;
         this.expenses = expenses;
     }
 
@@ -146,6 +149,14 @@ public class Day extends Entity {
 
     public void setAlcohol(int alcohol) {
         this.alcohol = alcohol;
+    }
+    
+    public int getPractice() {
+        return practice;
+    }
+    
+    public void setPractice(int practice) {
+        this.practice = practice;
     }
 
     public double getExpenses() {

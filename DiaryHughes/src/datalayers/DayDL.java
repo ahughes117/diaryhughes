@@ -196,7 +196,7 @@ public class DayDL extends DataLayer {
         Day d = (Day) e;
 
         String query = ""
-                + "INSERT INTO day (dayID, Date, Summary, Sex, Work, Fun, Special, Alcohol, Expenses, DateCreated) VALUES "
+                + "INSERT INTO day (dayID, Date, Summary, Sex, Work, Fun, Special, Alcohol, Practice, Expenses, DateCreated) VALUES "
                 + "(?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP) ";
 
         PreparedStatement ps = c.prepareStatement(query);
@@ -209,7 +209,8 @@ public class DayDL extends DataLayer {
         ps.setInt(6, d.getFun());
         ps.setInt(7, d.getSpecial());
         ps.setInt(8, d.getAlcohol());
-        ps.setDouble(9, d.getExpenses());
+        ps.setInt(9, d.getPractice());
+        ps.setDouble(10, d.getExpenses());
 
         ps.executeUpdate();
 
@@ -238,8 +239,27 @@ public class DayDL extends DataLayer {
                 + "Fun = ? ,"
                 + "Special = ? ,"
                 + "Alcohol = ? ,"
+                + "Practice = ?, "
                 + "Expenses = ? ,"
                 + "WHERE dayID = ? ";
+        
+        PreparedStatement ps = c.prepareStatement(query);
+        
+        ps.setDate(1, d.getDate());
+        ps.setString(2, d.getSummary());
+        ps.setInt(3, d.getSex());
+        ps.setInt(4, d.getWork());
+        ps.setInt(5, d.getFun());
+        ps.setInt(6, d.getSpecial());
+        ps.setInt(7, d.getAlcohol());
+        ps.setInt(8, d.getPractice());
+        ps.setDouble(9, d.getExpenses());
+        ps.setInt(10, d.getDayID());
+        
+        ps.executeUpdate();
+        
+        //inserting correlated objects
+        insertContacts(d.getDayID(), d.getContacts());
     }
 
     @Override
@@ -249,7 +269,26 @@ public class DayDL extends DataLayer {
 
     @Override
     protected ArrayList<Entity> resultSetToEntity(ResultSet aR) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ArrayList<Entity> entityL = new ArrayList();
+        Day d;
+        
+        while(aR.next()) {
+            d = new Day(
+                    aR.getInt("dayID"),
+                    aR.getDate("Date"),
+                    aR.getString("Summary"),
+                    aR.getInt("Sex"),
+                    aR.getInt("Work"),
+                    aR.getInt("Fun"),
+                    aR.getInt("Special"),
+                    aR.getInt("Alcohol"),
+                    aR.getInt("Practice"),
+                    aR.getDouble("Expenses"),
+                    aR.getTimestamp("DateCreated"),
+                    aR.getTimestamp("_dateModified"));
+            entityL.add(d);
+        }
+        return entityL;
     }
 
     public void insertContacts(int dayID, ArrayList<Contact> contacts) throws SQLException {
