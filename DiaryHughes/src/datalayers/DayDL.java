@@ -56,35 +56,43 @@ public class DayDL extends DataLayer {
 
         return e;
     }
-    
+
     /**
      * Fetches and returns a particular day by it's date.
-     * 
+     *
      * @param aDate
      * @return
-     * @throws SQLException 
+     * @throws SQLException
      */
-    public Day fetchDayByDate(String aDate) throws SQLException {
+    public Day fetchDayByDate(Date aDate) throws SQLException {
         Day d;
-        
+
         String query = ""
                 + "SELECT * "
                 + "FROM day "
                 + "WHERE Date = ? ";
-        
-        PreparedStatement ps = c.prepareStatement(query);
-        ps.setString(1, aDate);
-        
-        ResultSet dayR = ps.executeQuery();
-        d = (Day)resultSetToEntity(dayR).get(0);
-        
-        //getting correlated objects
-        ArrayList<Contact> contactL = contactDL.getDayContacts(d.getDayID());
-        d.setContacts(contactL);
 
-        ArrayList<Event> eventL = eventDL.getDayEvents(d.getDayID());
-        d.setEvents(eventL);
-        
+        PreparedStatement ps = c.prepareStatement(query);
+        ps.setDate(1, aDate);
+
+        ResultSet dayR = ps.executeQuery();
+
+        ArrayList<Entity> resultL = resultSetToEntity(dayR);
+        if (resultL.isEmpty()) {
+            d = null;
+        } else {
+            d = (Day) resultL.get(0);
+        }
+
+        if (d != null) {
+            //getting correlated objects
+            ArrayList<Contact> contactL = contactDL.getDayContacts(d.getDayID());
+            d.setContacts(contactL);
+
+            ArrayList<Event> eventL = eventDL.getDayEvents(d.getDayID());
+            d.setEvents(eventL);
+        }
+
         return d;
     }
 
@@ -196,21 +204,20 @@ public class DayDL extends DataLayer {
         Day d = (Day) e;
 
         String query = ""
-                + "INSERT INTO day (dayID, Date, Summary, Sex, Work, Fun, Special, Alcohol, Practice, Expenses, DateCreated) VALUES "
+                + "INSERT INTO day (Date, Summary, Sex, Work, Fun, Special, Alcohol, Practice, Expenses, DateCreated) VALUES "
                 + "(?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP) ";
 
         PreparedStatement ps = c.prepareStatement(query);
 
-        ps.setInt(1, d.getDayID());
-        ps.setDate(2, d.getDate());
-        ps.setString(3, d.getSummary());
-        ps.setInt(4, d.getSex());
-        ps.setInt(5, d.getWork());
-        ps.setInt(6, d.getFun());
-        ps.setInt(7, d.getSpecial());
-        ps.setInt(8, d.getAlcohol());
-        ps.setInt(9, d.getPractice());
-        ps.setDouble(10, d.getExpenses());
+        ps.setDate(1, d.getDate());
+        ps.setString(2, d.getSummary());
+        ps.setInt(3, d.getSex());
+        ps.setInt(4, d.getWork());
+        ps.setInt(5, d.getFun());
+        ps.setInt(6, d.getSpecial());
+        ps.setInt(7, d.getAlcohol());
+        ps.setInt(8, d.getPractice());
+        ps.setDouble(9, d.getExpenses());
 
         ps.executeUpdate();
 
@@ -220,7 +227,14 @@ public class DayDL extends DataLayer {
         }
 
         //inserting correlated objects
-        insertContacts(id, d.getContacts());
+        if (d.getContacts() != null) {
+            insertContacts(id, d.getContacts());
+        }
+
+//        if (d.getEvents() != null) {
+//            insertEvents(id, d.getEvents());
+//        }
+
 
         return id;
     }
@@ -240,11 +254,11 @@ public class DayDL extends DataLayer {
                 + "Special = ? ,"
                 + "Alcohol = ? ,"
                 + "Practice = ?, "
-                + "Expenses = ? ,"
+                + "Expenses = ? "
                 + "WHERE dayID = ? ";
-        
+
         PreparedStatement ps = c.prepareStatement(query);
-        
+
         ps.setDate(1, d.getDate());
         ps.setString(2, d.getSummary());
         ps.setInt(3, d.getSex());
@@ -255,11 +269,13 @@ public class DayDL extends DataLayer {
         ps.setInt(8, d.getPractice());
         ps.setDouble(9, d.getExpenses());
         ps.setInt(10, d.getDayID());
-        
+
         ps.executeUpdate();
-        
+
         //inserting correlated objects
-        insertContacts(d.getDayID(), d.getContacts());
+        if (d.getContacts() != null) {
+            insertContacts(d.getDayID(), d.getContacts());
+        }
     }
 
     @Override
@@ -271,8 +287,8 @@ public class DayDL extends DataLayer {
     protected ArrayList<Entity> resultSetToEntity(ResultSet aR) throws SQLException {
         ArrayList<Entity> entityL = new ArrayList();
         Day d;
-        
-        while(aR.next()) {
+
+        while (aR.next()) {
             d = new Day(
                     aR.getInt("dayID"),
                     aR.getDate("Date"),

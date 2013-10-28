@@ -58,12 +58,13 @@ public class ContactDL extends DataLayer {
         ArrayList<Contact> contactL = new ArrayList();
         Contact con = new Contact();
         con.setDayID(aDayID);
+        e = con;
 
         ArrayList<Entity> entityL = searchEntity();
 
         //stupid but the only easy way to do it
         for (Entity ent : entityL) {
-            contactL.add((Contact) e);
+            contactL.add((Contact) ent);
         }
 
         return contactL;

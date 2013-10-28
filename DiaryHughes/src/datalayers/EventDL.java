@@ -69,7 +69,13 @@ public class EventDL extends DataLayer {
     @Override
     public ArrayList<Entity> searchEntity() throws SQLException {
         Event event = (Event) e;
-        Tag tag = event.getTags().get(0);
+        Tag tag;
+        if(event.getTags() != null && !event.getTags().isEmpty()) {
+            tag = event.getTags().get(0);
+        } else {
+            tag = new Tag();
+        }
+            
 
         String query = ""
                 + "SELECT * "
@@ -79,7 +85,8 @@ public class EventDL extends DataLayer {
                 + "INNER JOIN tag t ON et.tagID = t.tagID "
                 + "WHERE 1=1 ";
 
-        if (event.getCategory().getName() != null && !event.getCategory().getName().equals("")) {
+        if (event.getCategory() != null && event.getCategory().getName() != null 
+                && !event.getCategory().getName().equals("")) {
             query += " AND c.Name LIKE '%" + event.getCategory().getName() + "%' ";
         }
 
@@ -225,7 +232,8 @@ public class EventDL extends DataLayer {
         ArrayList<Event> eventL = new ArrayList();
         Event ev = new Event();
         ev.setDayID(aDayID);
-
+        e = ev;
+        
         ArrayList<Entity> entityL = searchEntity();
 
         //stupid but the only easy way to do it

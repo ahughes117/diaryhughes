@@ -35,6 +35,10 @@ public class Tag extends Entity {
     public Tag(String name) {
         this.name = name;
     }
+    
+    public Tag() {
+        
+    }
 
     public int getTagID() {
         return tagID;

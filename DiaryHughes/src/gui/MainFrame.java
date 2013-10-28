@@ -7,10 +7,11 @@ import java.awt.event.WindowEvent;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import sql.Connector;
+import util.MesDial;
+import util.StrVal;
 
 /**
  * The Main Frame of the application
@@ -21,7 +22,7 @@ public class MainFrame extends GUI {
 
     private Day d;
     private DayDL dDL;
-    
+
     /**
      * Creates new form MainFrame
      */
@@ -34,71 +35,175 @@ public class MainFrame extends GUI {
                 shutdown();
             }
         });
+        try {
+            loadDay();
+        } catch (SQLException ex) {
+            MesDial.conError(this);
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception x) {
+            MesDial.programError(this);
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, x);
+        }
 
         super.setFrameLocationCenter();
         this.setVisible(true);
     }
-    
+
     private void clear() {
         dateL.setText("Date: ");
         summaryArea.setText("");
         expensesF.setText("");
-        
+
         sexChk.setSelected(false);
         workChk.setSelected(false);
         funChk.setSelected(false);
         specialChk.setSelected(false);
         alcoholChk.setSelected(false);
         practiceChk.setSelected(false);
-        //until it is implemented
         practiceChk.setVisible(false);
-        
+
         eventL.removeAll();
         contactL.removeAll();
     }
-    
-    private void loadDay() throws SQLException {
-        SimpleDateFormat sqlF = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat displayF = new SimpleDateFormat("dd/MM/yyyy");
-        DecimalFormat df = new DecimalFormat("#.##");
-        
-        String sqlDate = sqlF.format(Calendar.getInstance());
-        
+
+    private boolean parseDay() {
+        boolean parsingSuccessful = true;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+        d = new Day();
+        if (existing) {
+            d.setDayID(id);
+        }
+
+        try {
+            d.setDate(StrVal.dateParser(dateFormat.format(new java.util.Date())));
+        } catch (Exception ex) {
+            parsingSuccessful = false;
+            MesDial.dateError(this);
+            Logger.getLogger(DayFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        try {
+            if (!expensesF.getText().equals("")) {
+                d.setExpenses(Double.valueOf(expensesF.getText()));
+            }
+        } catch (Exception ex) {
+            parsingSuccessful = false;
+            MesDial.doubleError(this);
+            Logger.getLogger(DayFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        d.setSummary(summaryArea.getText());
+
+        if (sexChk.isSelected()) {
+            d.setSex(1);
+        } else {
+            d.setSex(0);
+        }
+
+        if (workChk.isSelected()) {
+            d.setWork(1);
+        } else {
+            d.setWork(0);
+        }
+
+        if (funChk.isSelected()) {
+            d.setFun(1);
+        } else {
+            d.setFun(0);
+        }
+
+        if (specialChk.isSelected()) {
+            d.setSpecial(1);
+        } else {
+            d.setSpecial(0);
+        }
+
+        if (alcoholChk.isSelected()) {
+            d.setAlcohol(1);
+        } else {
+            d.setAlcohol(0);
+        }
+
+        if (practiceChk.isSelected()) {
+            d.setPractice(1);
+        } else {
+            d.setPractice(0);
+        }
+
+        return parsingSuccessful;
+    }
+
+    private void loadDay() throws SQLException, Exception {
+        dDL = new DayDL(c);
+
+        DecimalFormat decFormat = new DecimalFormat("#.##");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+        java.util.Date date = new java.util.Date();
+        java.sql.Date sqlDate = StrVal.dateParser(dateFormat.format(date));
+
         //fetching day details
         d = dDL.fetchDayByDate(sqlDate);
-        
+
         //first clearing fields
         clear();
-        
+
         //setting values on fields and check boxes
-        dateL.setText(dateL.getText() + displayF.format(Calendar.getInstance()));
-        summaryArea.setText(d.getSummary());
-        expensesF.setText(df.format(d.getExpenses()));
-        
-        if(d.getSex() == 1)
-            sexChk.setSelected(true);
-        
-        if(d.getWork() == 1)
-            workChk.setSelected(true);
-        
-        if(d.getFun() == 1)
-            funChk.setSelected(true);
-        
-        if(d.getSpecial() == 1)
-            specialChk.setSelected(true);
-        
-        if(d.getAlcohol() == 1)
-            alcoholChk.setSelected(true);
-        
+        dateL.setText(dateL.getText() + dateFormat.format(date));
+        statusL.setText(date.toString());
+
+        if (d != null) {
+            existing = true;
+            id = d.getDayID();
+            
+            summaryArea.setText(d.getSummary());
+            expensesF.setText(decFormat.format(d.getExpenses()));
+
+            if (d.getSex() == 1) {
+                sexChk.setSelected(true);
+            }
+
+            if (d.getWork() == 1) {
+                workChk.setSelected(true);
+            }
+
+            if (d.getFun() == 1) {
+                funChk.setSelected(true);
+            }
+
+            if (d.getSpecial() == 1) {
+                specialChk.setSelected(true);
+            }
+
+            if (d.getAlcohol() == 1) {
+                alcoholChk.setSelected(true);
+            }
+        } else {
+            existing = false;
+        }
     }
-    
-    private void save() {
-        
+
+    private void save() throws SQLException {
+
+        if (parseDay()) {
+            dDL = new DayDL(c, d);
+            if (!existing) {
+                id = dDL.insertEntity();
+                existing = true;
+            } else {
+                dDL.updateEntity();
+            }
+            MesDial.saveSuccess(this);
+        }
+
     }
 
     protected void shutdown() {
         try {
             c.closeConnection();
+            pFrame.setVisible(true);
+            this.dispose();
         } catch (SQLException ex) {
             Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -400,10 +505,20 @@ public class MainFrame extends GUI {
         jPanel9.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         saveBtn.setText("Save");
+        saveBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveBtnActionPerformed(evt);
+            }
+        });
 
         clearBtn.setText("Refresh");
 
         quitBtn.setText("Quit");
+        quitBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                quitBtnActionPerformed(evt);
+            }
+        });
 
         clearBtn1.setText("Edit");
 
@@ -498,6 +613,19 @@ public class MainFrame extends GUI {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void quitBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quitBtnActionPerformed
+        shutdown();
+    }//GEN-LAST:event_quitBtnActionPerformed
+
+    private void saveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveBtnActionPerformed
+        try {
+            save();
+        } catch (SQLException ex) {
+            MesDial.conError(this);
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_saveBtnActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox alcoholChk;
     private javax.swing.JButton clearBtn;
