@@ -1,4 +1,3 @@
-
 package gui;
 
 import datalayers.DayDL;
@@ -8,6 +7,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Date;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.logging.Level;
@@ -18,11 +18,11 @@ import util.StrVal;
 
 /**
  * Day Frame. CRUD for Day Entity
- * 
+ *
  * @author alexhughes
  */
 public class DayFrame extends GUI {
-    
+
     private static boolean instanceAlive = false;
     private Day d;
     private DayDL dDL;
@@ -33,15 +33,15 @@ public class DayFrame extends GUI {
     public DayFrame(GUI aPFrame, Connector aConnector, int anID) {
         super(aPFrame, aConnector, anID);
         instanceAlive = true;
-        
+
         initComponents();
         this.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 shutdown();
             }
         });
-        
-        if(anID != NIL) {
+
+        if (anID != NIL) {
             try {
                 loadDay();
             } catch (SQLException ex) {
@@ -54,15 +54,15 @@ public class DayFrame extends GUI {
             existing = false;
             statusL.setText("New Day");
         }
-        
+
         super.setFrameLocationCenter();
         this.setVisible(true);
     }
-    
+
     private boolean parseDay() {
         boolean parsingSuccessful = true;
         d = new Day();
-        
+
         try {
             d.setDate(StrVal.dateParser(dateF.getText()));
         } catch (Exception ex) {
@@ -70,63 +70,113 @@ public class DayFrame extends GUI {
             MesDial.dateError(this);
             Logger.getLogger(DayFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         try {
             d.setExpenses(Double.valueOf(expensesF.getText()));
-        } catch(Exception x) {
+        } catch (Exception x) {
             parsingSuccessful = false;
             MesDial.doubleError(this);
             Logger.getLogger(DayFrame.class.getName()).log(Level.SEVERE, null, x);
         }
-        
+
         d.setSummary(summaryArea.getText());
-        
-        if(sexChk.isSelected())
+
+        if (sexChk.isSelected()) {
             d.setSex(1);
-        else
+        } else {
             d.setSex(0);
-        
-        if(workChk.isSelected())
+        }
+
+        if (workChk.isSelected()) {
             d.setWork(1);
-        else
+        } else {
             d.setWork(0);
-        
-        if(funChk.isSelected())
+        }
+
+        if (funChk.isSelected()) {
             d.setFun(1);
-        else
+        } else {
             d.setFun(0);
-        
-        if(specialChk.isSelected())
+        }
+
+        if (specialChk.isSelected()) {
             d.setSpecial(1);
-        else
+        } else {
             d.setSpecial(0);
-        
-        if(alcoholChk.isSelected())
+        }
+
+        if (alcoholChk.isSelected()) {
             d.setAlcohol(1);
-        else
+        } else {
             d.setAlcohol(0);
-        
-        if(practiceChk.isSelected())
+        }
+
+        if (practiceChk.isSelected()) {
             d.setPractice(1);
-        else
+        } else {
             d.setPractice(0);
-        
-        
+        }
+
+
         return parsingSuccessful;
     }
-    
-    private void loadDay () throws SQLException {
-        
+
+    private void loadDay() throws SQLException {
+        DecimalFormat decFormat = new DecimalFormat("#.##");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+        //creating the day object and inserting its id
+        d = new Day();
+        d.setDayID(id);
+        dDL = new DayDL(c);
+
+        //fetching day details
+        d = (Day) dDL.fetchEntity();
+
+        //setting values on fields and check boxes
+        dateF.setText(dateFormat.format(d.getDate()));
+        summaryArea.setText(d.getSummary());
+        expensesF.setText(decFormat.format(d.getExpenses()));
+
+        if (d.getSex() == 1) {
+            sexChk.setSelected(true);
+        }
+
+        if (d.getWork() == 1) {
+            workChk.setSelected(true);
+        }
+
+        if (d.getFun() == 1) {
+            funChk.setSelected(true);
+        }
+
+        if (d.getSpecial() == 1) {
+            specialChk.setSelected(true);
+        }
+
+        if (d.getAlcohol() == 1) {
+            alcoholChk.setSelected(true);
+        }
     }
-    
+
     private void save() throws SQLException {
-        
+
+        if (parseDay()) {
+            dDL = new DayDL(c, d);
+            if (!existing) {
+                id = dDL.insertEntity();
+                existing = true;
+            } else {
+                dDL.updateEntity();
+            }
+            MesDial.saveSuccess(this);
+        }
     }
-    
+
     public static boolean isInstanceAlive() {
         return instanceAlive;
     }
-    
+
     @Override
     protected void shutdown() {
         instanceAlive = false;
@@ -145,16 +195,16 @@ public class DayFrame extends GUI {
         jPanel2 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        dateF1 = new javax.swing.JTextField();
-        expensesF1 = new javax.swing.JTextField();
+        dateF = new javax.swing.JTextField();
+        expensesF = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
-        summaryArea1 = new javax.swing.JTextArea();
-        sexChk1 = new javax.swing.JCheckBox();
-        workChk1 = new javax.swing.JCheckBox();
-        funChk1 = new javax.swing.JCheckBox();
-        specialChk1 = new javax.swing.JCheckBox();
-        alcoholChk1 = new javax.swing.JCheckBox();
-        practiceChk1 = new javax.swing.JCheckBox();
+        summaryArea = new javax.swing.JTextArea();
+        sexChk = new javax.swing.JCheckBox();
+        workChk = new javax.swing.JCheckBox();
+        funChk = new javax.swing.JCheckBox();
+        specialChk = new javax.swing.JCheckBox();
+        alcoholChk = new javax.swing.JCheckBox();
+        practiceChk = new javax.swing.JCheckBox();
         jPanel3 = new javax.swing.JPanel();
         okBtn = new javax.swing.JButton();
         backBtn = new javax.swing.JButton();
@@ -184,21 +234,21 @@ public class DayFrame extends GUI {
 
         jScrollPane2.setBorder(javax.swing.BorderFactory.createTitledBorder("Summary"));
 
-        summaryArea1.setColumns(20);
-        summaryArea1.setRows(5);
-        jScrollPane2.setViewportView(summaryArea1);
+        summaryArea.setColumns(20);
+        summaryArea.setRows(5);
+        jScrollPane2.setViewportView(summaryArea);
 
-        sexChk1.setText("Sex");
+        sexChk.setText("Sex");
 
-        workChk1.setText("Work");
+        workChk.setText("Work");
 
-        funChk1.setText("Fun");
+        funChk.setText("Fun");
 
-        specialChk1.setText("Special");
+        specialChk.setText("Special");
 
-        alcoholChk1.setText("Alcohol");
+        alcoholChk.setText("Alcohol");
 
-        practiceChk1.setText("Practice");
+        practiceChk.setText("Practice");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -213,21 +263,21 @@ public class DayFrame extends GUI {
                             .addComponent(jLabel3))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(dateF1)
-                            .addComponent(expensesF1, javax.swing.GroupLayout.Alignment.TRAILING)))
+                            .addComponent(dateF)
+                            .addComponent(expensesF, javax.swing.GroupLayout.Alignment.TRAILING)))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 296, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(funChk1)
-                            .addComponent(specialChk1)
+                            .addComponent(funChk)
+                            .addComponent(specialChk)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(sexChk1)
-                                    .addComponent(workChk1))
+                                    .addComponent(sexChk)
+                                    .addComponent(workChk))
                                 .addGap(52, 52, 52)
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(practiceChk1)
-                                    .addComponent(alcoholChk1))))
+                                    .addComponent(practiceChk)
+                                    .addComponent(alcoholChk))))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -237,23 +287,23 @@ public class DayFrame extends GUI {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(dateF1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(dateF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(expensesF1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(expensesF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(sexChk1)
-                    .addComponent(alcoholChk1))
+                    .addComponent(sexChk)
+                    .addComponent(alcoholChk))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(workChk1)
-                    .addComponent(practiceChk1))
+                    .addComponent(workChk)
+                    .addComponent(practiceChk))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(funChk1)
+                .addComponent(funChk)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(specialChk1)
+                .addComponent(specialChk)
                 .addGap(17, 17, 17)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
                 .addContainerGap())
@@ -262,8 +312,18 @@ public class DayFrame extends GUI {
         jPanel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         okBtn.setText("OK");
+        okBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                okBtnActionPerformed(evt);
+            }
+        });
 
         backBtn.setText("<Back");
+        backBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backBtnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -288,7 +348,7 @@ public class DayFrame extends GUI {
 
         jPanel4.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
-        statusL.setText("null");
+        statusL.setText(null);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -309,6 +369,11 @@ public class DayFrame extends GUI {
         jScrollPane3.setViewportView(jList1);
 
         jButton1.setText("New");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Edit");
 
@@ -333,7 +398,7 @@ public class DayFrame extends GUI {
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addComponent(jScrollPane3)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
@@ -347,6 +412,11 @@ public class DayFrame extends GUI {
         jScrollPane4.setViewportView(jList2);
 
         jButton4.setText("New");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         jButton5.setText("Edit");
 
@@ -417,50 +487,61 @@ public class DayFrame extends GUI {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
+    private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
+        shutdown();
+    }//GEN-LAST:event_backBtnActionPerformed
+
+    private void okBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okBtnActionPerformed
+        try {
+            save();
+        } catch (SQLException ex) {
+            MesDial.conError(this);
+            Logger.getLogger(DayFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_okBtnActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        if (!EventFrame.isInstanceAlive()) {
+            new EventFrame(this, c, NIL);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        if(!ContactFrame.isInstanceAlive()) {
+            new ContactFrame(this, c, NIL);
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox alcoholChk;
-    private javax.swing.JCheckBox alcoholChk1;
     private javax.swing.JButton backBtn;
     private javax.swing.JTextField dateF;
-    private javax.swing.JTextField dateF1;
     private javax.swing.JTextField expensesF;
-    private javax.swing.JTextField expensesF1;
     private javax.swing.JCheckBox funChk;
-    private javax.swing.JCheckBox funChk1;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JList jList1;
     private javax.swing.JList jList2;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JButton okBtn;
     private javax.swing.JCheckBox practiceChk;
-    private javax.swing.JCheckBox practiceChk1;
     private javax.swing.JCheckBox sexChk;
-    private javax.swing.JCheckBox sexChk1;
     private javax.swing.JCheckBox specialChk;
-    private javax.swing.JCheckBox specialChk1;
     private javax.swing.JLabel statusL;
     private javax.swing.JTextArea summaryArea;
-    private javax.swing.JTextArea summaryArea1;
     private javax.swing.JCheckBox workChk;
-    private javax.swing.JCheckBox workChk1;
     // End of variables declaration//GEN-END:variables
 }

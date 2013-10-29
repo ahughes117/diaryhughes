@@ -86,24 +86,24 @@
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="dateF1" alignment="0" max="32767" attributes="0"/>
-                              <Component id="expensesF1" alignment="1" max="32767" attributes="0"/>
+                              <Component id="dateF" alignment="0" max="32767" attributes="0"/>
+                              <Component id="expensesF" alignment="1" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <Component id="jScrollPane2" alignment="0" pref="296" max="32767" attributes="0"/>
                       <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="funChk1" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="specialChk1" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="funChk" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="specialChk" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="sexChk1" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="workChk1" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="sexChk" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="workChk" alignment="0" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="52" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="practiceChk1" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="alcoholChk1" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="practiceChk" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="alcoholChk" alignment="0" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -120,27 +120,27 @@
                   <EmptySpace min="-2" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="dateF1" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="dateF" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="expensesF1" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="expensesF" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="sexChk1" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="alcoholChk1" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="sexChk" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="alcoholChk" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="workChk1" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="practiceChk1" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="workChk" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="practiceChk" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                  <Component id="funChk1" min="-2" max="-2" attributes="0"/>
+                  <Component id="funChk" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                  <Component id="specialChk1" min="-2" max="-2" attributes="0"/>
+                  <Component id="specialChk" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
                   <Component id="jScrollPane2" pref="164" max="32767" attributes="0"/>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
@@ -159,9 +159,9 @@
             <Property name="text" type="java.lang.String" value="Expenses:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="dateF1">
+        <Component class="javax.swing.JTextField" name="dateF">
         </Component>
-        <Component class="javax.swing.JTextField" name="expensesF1">
+        <Component class="javax.swing.JTextField" name="expensesF">
         </Component>
         <Container class="javax.swing.JScrollPane" name="jScrollPane2">
           <Properties>
@@ -177,7 +177,7 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
           <SubComponents>
-            <Component class="javax.swing.JTextArea" name="summaryArea1">
+            <Component class="javax.swing.JTextArea" name="summaryArea">
               <Properties>
                 <Property name="columns" type="int" value="20"/>
                 <Property name="rows" type="int" value="5"/>
@@ -185,32 +185,32 @@
             </Component>
           </SubComponents>
         </Container>
-        <Component class="javax.swing.JCheckBox" name="sexChk1">
+        <Component class="javax.swing.JCheckBox" name="sexChk">
           <Properties>
             <Property name="text" type="java.lang.String" value="Sex"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JCheckBox" name="workChk1">
+        <Component class="javax.swing.JCheckBox" name="workChk">
           <Properties>
             <Property name="text" type="java.lang.String" value="Work"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JCheckBox" name="funChk1">
+        <Component class="javax.swing.JCheckBox" name="funChk">
           <Properties>
             <Property name="text" type="java.lang.String" value="Fun"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JCheckBox" name="specialChk1">
+        <Component class="javax.swing.JCheckBox" name="specialChk">
           <Properties>
             <Property name="text" type="java.lang.String" value="Special"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JCheckBox" name="alcoholChk1">
+        <Component class="javax.swing.JCheckBox" name="alcoholChk">
           <Properties>
             <Property name="text" type="java.lang.String" value="Alcohol"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JCheckBox" name="practiceChk1">
+        <Component class="javax.swing.JCheckBox" name="practiceChk">
           <Properties>
             <Property name="text" type="java.lang.String" value="Practice"/>
           </Properties>
@@ -256,11 +256,17 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="OK"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="okBtnActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="backBtn">
           <Properties>
             <Property name="text" type="java.lang.String" value="&lt;Back"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="backBtnActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
@@ -328,7 +334,7 @@
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <Component id="jScrollPane3" max="32767" attributes="0"/>
+                  <Component id="jScrollPane3" pref="131" max="32767" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jButton1" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -361,6 +367,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="New"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="jButton2">
           <Properties>
@@ -438,6 +447,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="New"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton4ActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="jButton5">
           <Properties>
