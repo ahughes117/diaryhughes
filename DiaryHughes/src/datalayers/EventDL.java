@@ -120,8 +120,8 @@ public class EventDL extends DataLayer {
         Event ev = (Event) e;
 
         String query = ""
-                + "INSERT INTO event (dayID, categoryID, Description, Time, Picture, DateCreated) VALUES "
-                + "(?, ?, ?, ?, ?, CURRENT_TIMESTAMP) ";
+                + "INSERT INTO event (dayID, categoryID, Name, Description, Time, Picture, DateCreated) VALUES "
+                + "(?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP) ";
 
         PreparedStatement ps = c.prepareStatement(query);
 

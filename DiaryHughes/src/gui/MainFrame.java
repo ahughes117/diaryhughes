@@ -4,6 +4,7 @@ import datalayers.DayDL;
 import entities.Contact;
 import entities.Day;
 import entities.Entity;
+import static gui.GUI.NIL;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.SQLException;
@@ -160,7 +161,7 @@ public class MainFrame extends GUI {
         if (d != null) {
             existing = true;
             id = d.getDayID();
-            
+
             summaryArea.setText(d.getSummary());
             expensesF.setText(decFormat.format(d.getExpenses()));
 
@@ -274,8 +275,18 @@ public class MainFrame extends GUI {
         jScrollPane2.setViewportView(eventL);
 
         newEvBtn.setText("New");
+        newEvBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newEvBtnActionPerformed(evt);
+            }
+        });
 
         editEvBtn.setText("Edit");
+        editEvBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editEvBtnActionPerformed(evt);
+            }
+        });
 
         deleteEvBtn.setText("Delete");
 
@@ -312,8 +323,18 @@ public class MainFrame extends GUI {
         jScrollPane3.setViewportView(contactL);
 
         newConBtn.setText("New");
+        newConBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newConBtnActionPerformed(evt);
+            }
+        });
 
         editConBtn.setText("Edit");
+        editConBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editConBtnActionPerformed(evt);
+            }
+        });
 
         deleteConBtn.setText("Delete");
 
@@ -324,7 +345,7 @@ public class MainFrame extends GUI {
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3)
                     .addGroup(jPanel7Layout.createSequentialGroup()
                         .addComponent(newConBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -397,7 +418,7 @@ public class MainFrame extends GUI {
                                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(practiceChk)
                                     .addComponent(alcoholChk))))
-                        .addGap(0, 5, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel8Layout.setVerticalGroup(
@@ -406,7 +427,7 @@ public class MainFrame extends GUI {
                 .addContainerGap()
                 .addComponent(dateL)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(sexChk)
@@ -458,7 +479,7 @@ public class MainFrame extends GUI {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 590, Short.MAX_VALUE)
+            .addGap(0, 560, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -471,7 +492,7 @@ public class MainFrame extends GUI {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 590, Short.MAX_VALUE)
+            .addGap(0, 560, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -484,7 +505,7 @@ public class MainFrame extends GUI {
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 590, Short.MAX_VALUE)
+            .addGap(0, 560, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -497,7 +518,7 @@ public class MainFrame extends GUI {
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 590, Short.MAX_VALUE)
+            .addGap(0, 560, Short.MAX_VALUE)
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -630,6 +651,47 @@ public class MainFrame extends GUI {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_saveBtnActionPerformed
+
+    private void newEvBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newEvBtnActionPerformed
+        if (!EventFrame.isInstanceAlive()) {
+            new EventFrame(this, c, NIL, id);
+        }
+    }//GEN-LAST:event_newEvBtnActionPerformed
+
+    private void newConBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newConBtnActionPerformed
+        if (!ContactFrame.isInstanceAlive()) {
+            new ContactFrame(this, c, NIL);
+        }
+    }//GEN-LAST:event_newConBtnActionPerformed
+
+    private void editEvBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editEvBtnActionPerformed
+        if (eventL.getSelectedValue() != null) {
+            try {
+                int id = StrVal.parseIdFromString((String) eventL.getSelectedValue());
+                if (EventFrame.isInstanceAlive()) {
+                    new EventFrame(this, c, id, id);
+                }
+            } catch (Exception x) {
+                MesDial.conError(this);
+                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, x);
+            }
+        }
+    }//GEN-LAST:event_editEvBtnActionPerformed
+
+    private void editConBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editConBtnActionPerformed
+        if (contactL.getSelectedValue() != null) {
+            try {
+                int id = StrVal.parseIdFromString((String) contactL.getSelectedValue());
+                if (EventFrame.isInstanceAlive()) {
+                    new ContactFrame(this, c, id);
+                }
+            } catch (Exception x) {
+                MesDial.conError(this);
+                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, x);
+            }
+        }
+    }//GEN-LAST:event_editConBtnActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox alcoholChk;
     private javax.swing.JButton clearBtn;

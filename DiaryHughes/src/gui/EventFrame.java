@@ -5,7 +5,6 @@ import entities.Event;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.SQLException;
-import java.sql.Time;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import sql.Connector;
@@ -20,14 +19,16 @@ import util.StrVal;
 public class EventFrame extends GUI {
 
     private static boolean instanceAlive = false;
+    private int dayID;
     private Event e;
     private EventDL eDL;
 
     /**
      * Constructor for EventFrame
      */
-    public EventFrame(GUI aPFrame, Connector aConnector, int anID) {
+    public EventFrame(GUI aPFrame, Connector aConnector, int anID, int aDayID) {
         super(aPFrame, aConnector, anID);
+        dayID = aDayID;
         instanceAlive = true;
 
         initComponents();
@@ -61,15 +62,19 @@ public class EventFrame extends GUI {
         boolean parsingSuccessful = true;
 
         e = new Event();
-
+        
+        e.setDayID(dayID);
         e.setName(nameF.getText());
         e.setDesc(descArea.getText());
-        try {
-            e.setTime(StrVal.timeParser(timeF.getText()));
-        } catch (Exception ex) {
-            parsingSuccessful = false;
-            MesDial.timeError(this);
-            Logger.getLogger(EventFrame.class.getName()).log(Level.SEVERE, null, ex);
+
+        if (!timeF.getText().equals("")) {
+            try {
+                e.setTime(StrVal.timeParser(timeF.getText()));
+            } catch (Exception ex) {
+                parsingSuccessful = false;
+                MesDial.timeError(this);
+                Logger.getLogger(EventFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
         return parsingSuccessful;
@@ -78,7 +83,8 @@ public class EventFrame extends GUI {
     private void loadEvent() throws SQLException {
         eDL = new EventDL(c, e);
         e = (Event) eDL.fetchEntity();
-
+        
+        dayID = e.getDayID();
         nameF.setText(e.getName());
         timeF.setText(e.getTime().toString());
         descArea.setText(e.getDesc());
