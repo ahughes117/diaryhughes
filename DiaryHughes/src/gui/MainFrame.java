@@ -163,7 +163,9 @@ public class MainFrame extends GUI {
             id = d.getDayID();
 
             summaryArea.setText(d.getSummary());
-            expensesF.setText(decFormat.format(d.getExpenses()));
+            if (d.getExpenses() != -1) {
+                expensesF.setText(decFormat.format(d.getExpenses()));
+            }
 
             if (d.getSex() == 1) {
                 sexChk.setSelected(true);
@@ -189,7 +191,7 @@ public class MainFrame extends GUI {
         }
     }
 
-    private void save() throws SQLException {
+    private void save(boolean confirmationDialog) throws SQLException {
 
         if (parseDay()) {
             dDL = new DayDL(c, d);
@@ -199,7 +201,9 @@ public class MainFrame extends GUI {
             } else {
                 dDL.updateEntity();
             }
-            MesDial.saveSuccess(this);
+            if (confirmationDialog) {
+                MesDial.saveSuccess(this);
+            }
         }
 
     }
@@ -223,8 +227,8 @@ public class MainFrame extends GUI {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTabbedPane1 = new javax.swing.JTabbedPane();
-        jPanel1 = new javax.swing.JPanel();
+        tabbedPane = new javax.swing.JTabbedPane();
+        todayPanel = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         eventL = new javax.swing.JList();
@@ -249,17 +253,18 @@ public class MainFrame extends GUI {
         jLabel2 = new javax.swing.JLabel();
         expensesF = new javax.swing.JTextField();
         practiceChk = new javax.swing.JCheckBox();
-        jPanel2 = new javax.swing.JPanel();
-        jPanel3 = new javax.swing.JPanel();
-        jPanel4 = new javax.swing.JPanel();
-        jPanel5 = new javax.swing.JPanel();
+        dayPanel = new javax.swing.JPanel();
+        eventPanel = new javax.swing.JPanel();
+        contactPanel = new javax.swing.JPanel();
+        tagPanel = new javax.swing.JPanel();
+        categoryPanel = new javax.swing.JPanel();
         jPanel9 = new javax.swing.JPanel();
         saveBtn = new javax.swing.JButton();
-        clearBtn = new javax.swing.JButton();
+        refreshBtn = new javax.swing.JButton();
         quitBtn = new javax.swing.JButton();
-        clearBtn1 = new javax.swing.JButton();
-        clearBtn2 = new javax.swing.JButton();
-        clearBtn3 = new javax.swing.JButton();
+        editBtn = new javax.swing.JButton();
+        newBtn = new javax.swing.JButton();
+        deleteBtn = new javax.swing.JButton();
         jPanel10 = new javax.swing.JPanel();
         statusL = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -447,85 +452,98 @@ public class MainFrame extends GUI {
                 .addGap(37, 37, 37))
         );
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout todayPanelLayout = new javax.swing.GroupLayout(todayPanel);
+        todayPanel.setLayout(todayPanelLayout);
+        todayPanelLayout.setHorizontalGroup(
+            todayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, todayPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(todayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        todayPanelLayout.setVerticalGroup(
+            todayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(todayPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(todayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGroup(todayPanelLayout.createSequentialGroup()
                         .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
                         .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab("Today", jPanel1);
+        tabbedPane.addTab("Today", todayPanel);
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout dayPanelLayout = new javax.swing.GroupLayout(dayPanel);
+        dayPanel.setLayout(dayPanelLayout);
+        dayPanelLayout.setHorizontalGroup(
+            dayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 560, Short.MAX_VALUE)
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        dayPanelLayout.setVerticalGroup(
+            dayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 506, Short.MAX_VALUE)
         );
 
-        jTabbedPane1.addTab("Days", jPanel2);
+        tabbedPane.addTab("Days", dayPanel);
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout eventPanelLayout = new javax.swing.GroupLayout(eventPanel);
+        eventPanel.setLayout(eventPanelLayout);
+        eventPanelLayout.setHorizontalGroup(
+            eventPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 560, Short.MAX_VALUE)
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        eventPanelLayout.setVerticalGroup(
+            eventPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 506, Short.MAX_VALUE)
         );
 
-        jTabbedPane1.addTab("Events", jPanel3);
+        tabbedPane.addTab("Events", eventPanel);
 
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout contactPanelLayout = new javax.swing.GroupLayout(contactPanel);
+        contactPanel.setLayout(contactPanelLayout);
+        contactPanelLayout.setHorizontalGroup(
+            contactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 560, Short.MAX_VALUE)
         );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        contactPanelLayout.setVerticalGroup(
+            contactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 506, Short.MAX_VALUE)
         );
 
-        jTabbedPane1.addTab("Contacts", jPanel4);
+        tabbedPane.addTab("Contacts", contactPanel);
 
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout tagPanelLayout = new javax.swing.GroupLayout(tagPanel);
+        tagPanel.setLayout(tagPanelLayout);
+        tagPanelLayout.setHorizontalGroup(
+            tagPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 560, Short.MAX_VALUE)
         );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        tagPanelLayout.setVerticalGroup(
+            tagPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 506, Short.MAX_VALUE)
         );
 
-        jTabbedPane1.addTab("Tags", jPanel5);
+        tabbedPane.addTab("Tags", tagPanel);
+
+        javax.swing.GroupLayout categoryPanelLayout = new javax.swing.GroupLayout(categoryPanel);
+        categoryPanel.setLayout(categoryPanelLayout);
+        categoryPanelLayout.setHorizontalGroup(
+            categoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 560, Short.MAX_VALUE)
+        );
+        categoryPanelLayout.setVerticalGroup(
+            categoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 506, Short.MAX_VALUE)
+        );
+
+        tabbedPane.addTab("Categories", categoryPanel);
 
         jPanel9.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -536,7 +554,7 @@ public class MainFrame extends GUI {
             }
         });
 
-        clearBtn.setText("Refresh");
+        refreshBtn.setText("Refresh");
 
         quitBtn.setText("Quit");
         quitBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -545,11 +563,16 @@ public class MainFrame extends GUI {
             }
         });
 
-        clearBtn1.setText("Edit");
+        editBtn.setText("Edit");
 
-        clearBtn2.setText("New");
+        newBtn.setText("New");
+        newBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newBtnActionPerformed(evt);
+            }
+        });
 
-        clearBtn3.setText("Delete");
+        deleteBtn.setText("Delete");
 
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
@@ -559,13 +582,13 @@ public class MainFrame extends GUI {
                 .addContainerGap()
                 .addComponent(saveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(clearBtn2, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(newBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(clearBtn1, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(editBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(clearBtn3, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(deleteBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(clearBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(refreshBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(quitBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -576,11 +599,11 @@ public class MainFrame extends GUI {
                 .addContainerGap()
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(saveBtn)
-                    .addComponent(clearBtn)
+                    .addComponent(refreshBtn)
                     .addComponent(quitBtn)
-                    .addComponent(clearBtn1)
-                    .addComponent(clearBtn2)
-                    .addComponent(clearBtn3))
+                    .addComponent(editBtn)
+                    .addComponent(newBtn)
+                    .addComponent(deleteBtn))
                 .addContainerGap(13, Short.MAX_VALUE))
         );
 
@@ -621,14 +644,14 @@ public class MainFrame extends GUI {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(tabbedPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1)
+                .addComponent(tabbedPane)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -645,7 +668,7 @@ public class MainFrame extends GUI {
 
     private void saveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveBtnActionPerformed
         try {
-            save();
+            save(true);
         } catch (SQLException ex) {
             MesDial.conError(this);
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
@@ -653,23 +676,35 @@ public class MainFrame extends GUI {
     }//GEN-LAST:event_saveBtnActionPerformed
 
     private void newEvBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newEvBtnActionPerformed
-        if (!EventFrame.isInstanceAlive()) {
-            new EventFrame(this, c, NIL, id);
+        try {
+            save(false);
+            if (!EventFrame.isInstanceAlive()) {
+                new EventFrame(this, c, NIL, id);
+            }
+        } catch (SQLException ex) {
+            MesDial.conError(this);
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_newEvBtnActionPerformed
 
     private void newConBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newConBtnActionPerformed
-        if (!ContactFrame.isInstanceAlive()) {
-            new ContactFrame(this, c, NIL);
+        try {
+            save(false);
+            if (!ContactFrame.isInstanceAlive()) {
+                new ContactFrame(this, c, NIL);
+            }
+        } catch (SQLException ex) {
+            MesDial.conError(this);
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_newConBtnActionPerformed
 
     private void editEvBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editEvBtnActionPerformed
         if (eventL.getSelectedValue() != null) {
             try {
-                int id = StrVal.parseIdFromString((String) eventL.getSelectedValue());
+                int eventID = StrVal.parseIdFromString((String) eventL.getSelectedValue());
                 if (EventFrame.isInstanceAlive()) {
-                    new EventFrame(this, c, id, id);
+                    new EventFrame(this, c, id, eventID);
                 }
             } catch (Exception x) {
                 MesDial.conError(this);
@@ -681,9 +716,9 @@ public class MainFrame extends GUI {
     private void editConBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editConBtnActionPerformed
         if (contactL.getSelectedValue() != null) {
             try {
-                int id = StrVal.parseIdFromString((String) contactL.getSelectedValue());
+                int contactID = StrVal.parseIdFromString((String) contactL.getSelectedValue());
                 if (EventFrame.isInstanceAlive()) {
-                    new ContactFrame(this, c, id);
+                    new ContactFrame(this, c, contactID);
                 }
             } catch (Exception x) {
                 MesDial.conError(this);
@@ -692,31 +727,50 @@ public class MainFrame extends GUI {
         }
     }//GEN-LAST:event_editConBtnActionPerformed
 
+    private void newBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newBtnActionPerformed
+
+        if (tabbedPane.getSelectedIndex() == 1) {
+            if (!DayFrame.isInstanceAlive()) {
+                new DayFrame(this, c, NIL);
+            }
+        } else if (tabbedPane.getSelectedIndex() == 2) {
+        } else if (tabbedPane.getSelectedIndex() == 3) {
+            if (!ContactFrame.isInstanceAlive()) {
+                new ContactFrame(this, c, NIL);
+            }
+        } else if (tabbedPane.getSelectedIndex() == 4) {
+            if (!TagFrame.isInstanceAlive()) {
+                new TagFrame(this, c, NIL);
+            }
+        } else if (tabbedPane.getSelectedIndex() == 5) {
+            if (!CategoryFrame.isInstanceAlive()) {
+                new CategoryFrame(this, c, NIL);
+            }
+        }
+
+    }//GEN-LAST:event_newBtnActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox alcoholChk;
-    private javax.swing.JButton clearBtn;
-    private javax.swing.JButton clearBtn1;
-    private javax.swing.JButton clearBtn2;
-    private javax.swing.JButton clearBtn3;
+    private javax.swing.JPanel categoryPanel;
     private javax.swing.JList contactL;
+    private javax.swing.JPanel contactPanel;
     private javax.swing.JLabel dateL;
+    private javax.swing.JPanel dayPanel;
+    private javax.swing.JButton deleteBtn;
     private javax.swing.JButton deleteConBtn;
     private javax.swing.JButton deleteEvBtn;
+    private javax.swing.JButton editBtn;
     private javax.swing.JButton editConBtn;
     private javax.swing.JButton editEvBtn;
     private javax.swing.JList eventL;
+    private javax.swing.JPanel eventPanel;
     private javax.swing.JTextField expensesF;
     private javax.swing.JCheckBox funChk;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
@@ -724,16 +778,20 @@ public class MainFrame extends GUI {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JButton newBtn;
     private javax.swing.JButton newConBtn;
     private javax.swing.JButton newEvBtn;
     private javax.swing.JCheckBox practiceChk;
     private javax.swing.JButton quitBtn;
+    private javax.swing.JButton refreshBtn;
     private javax.swing.JButton saveBtn;
     private javax.swing.JCheckBox sexChk;
     private javax.swing.JCheckBox specialChk;
     private javax.swing.JLabel statusL;
     private javax.swing.JTextArea summaryArea;
+    private javax.swing.JTabbedPane tabbedPane;
+    private javax.swing.JPanel tagPanel;
+    private javax.swing.JPanel todayPanel;
     private javax.swing.JCheckBox workChk;
     // End of variables declaration//GEN-END:variables
 }
