@@ -9,10 +9,11 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import sql.Connector;
+import util.ListParser;
 import util.MesDial;
 
 /**
- * Category Frame. CRUD for Category Entity
+ * Tag Frame. CRUD for Tag Entity
  *
  * @author alexhughes
  */
@@ -23,7 +24,7 @@ public class TagFrame extends GUI {
     private TagDL tagDL;
 
     /**
-     * Creates new form CategoryFrame
+     * Creates new form TagFrame
      */
     public TagFrame(GUI aPFrame, Connector aConnector, int anID) {
         super(aPFrame, aConnector, anID);
@@ -56,13 +57,35 @@ public class TagFrame extends GUI {
     }
 
     /**
-     * Parses a Category's details from the fields.
+     * Parses a tag's details from the fields.
      *
      * @return
      */
-    private boolean parseTag() {
+    private boolean parseTag() throws SQLException {
         boolean parsingSuccessful = true;
-        
+
+        tag = new Tag();
+        if (existing) {
+            tag.setTagID(id);
+        }
+
+        //eliminating whitespace
+        String name = nameF.getText();
+        name = name.replaceAll("\\s+", "");
+
+        //checking length
+        if (name.length() > 45) {
+            MesDial.stringError(this);
+            parsingSuccessful = false;
+        }
+
+        tag.setName(name);
+        tagDL = new TagDL(c, tag);
+
+        if (tagDL.exists()) {
+            MesDial.tagExistsError(this);
+            parsingSuccessful = false;
+        }
 
         return parsingSuccessful;
     }
@@ -73,16 +96,35 @@ public class TagFrame extends GUI {
      * @throws SQLException
      */
     private void loadTag() throws SQLException {
-        
+        tag = new Tag();
+        tag.setTagID(id);
+
+        tagDL = new TagDL(c, tag);
+        tag = (Tag) tagDL.fetchEntity();
+
+        nameF.setText(tag.getName());
+        ListParser.fillList(tagDL.getTagEvents(tag.getTagID()), jList1);
+
+        statusL.setText("Date Modified: " + tag.getDateModified());
     }
 
     /**
-     * Saves a category
+     * Saves a tag
      *
      * @throws SQLException
      */
     private void save() throws SQLException {
-        
+
+        if (parseTag()) {
+            tagDL = new TagDL(c, tag);
+            if (!existing) {
+                id = tagDL.insertEntity();
+                existing = true;
+            } else {
+                tagDL.updateEntity();
+            }
+            MesDial.saveSuccess(this);
+        }
     }
 
     public static boolean isInstanceAlive() {
@@ -188,8 +230,18 @@ public class TagFrame extends GUI {
         jPanel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         backBtn.setText("<Back");
+        backBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backBtnActionPerformed(evt);
+            }
+        });
 
         okBtn.setText("OK");
+        okBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                okBtnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -238,6 +290,19 @@ public class TagFrame extends GUI {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void okBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okBtnActionPerformed
+        try {
+            save();
+        } catch (SQLException ex) {
+            MesDial.conError(this);
+            Logger.getLogger(TagFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_okBtnActionPerformed
+
+    private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
+        shutdown();
+    }//GEN-LAST:event_backBtnActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton backBtn;
     private javax.swing.JLabel jLabel1;
