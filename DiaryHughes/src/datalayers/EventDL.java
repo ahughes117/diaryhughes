@@ -71,7 +71,7 @@ public class EventDL extends DataLayer {
         String query = ""
                 + "SELECT * "
                 + "FROM event "
-                + "ORDERY BY " + aSorting;
+                + "ORDER BY " + aSorting;
 
         ResultSet eventR = c.sendQuery(query);
 

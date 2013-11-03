@@ -1,20 +1,18 @@
 package gui;
 
-import datalayers.DayDL;
-import entities.Contact;
+import datalayers.*;
 import entities.Day;
-import entities.Entity;
 import static gui.GUI.NIL;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 import sql.Connector;
-import util.ListParser;
 import util.MesDial;
 import util.StrVal;
 import util.TableParser;
@@ -28,6 +26,10 @@ public class MainFrame extends GUI {
 
     private Day d;
     private DayDL dDL;
+    private EventDL eDL;
+    private ContactDL cDL;
+    private TagDL tDL;
+    private CategoryDL catDL;
 
     /**
      * Creates new form MainFrame
@@ -207,7 +209,7 @@ public class MainFrame extends GUI {
             }
         }
     }
-    
+
     private void loadDayTable() throws SQLException {
         dDL = new DayDL(c);
         TableParser.fillTable(null, dayTable);
@@ -221,6 +223,80 @@ public class MainFrame extends GUI {
         } catch (SQLException ex) {
             Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    /**
+     * Loads the JTable of each tab
+     *
+     * @param anEntity
+     */
+    private void refresh(String anEntity) {
+        if (anEntity.equals("day")) {
+            dDL = new DayDL(c);
+            try {
+                TableParser.fillTable(dDL.fetchEntitiesR("Date DESC"), dayTable);
+            } catch (SQLException ex) {
+                MesDial.conError(this);
+                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else if (anEntity.equals("event")) {
+            eDL = new EventDL(c);
+            try {
+                TableParser.fillTable(eDL.fetchEntitiesR("_dateModified DESC"), eventTable);
+            } catch (SQLException ex) {
+                MesDial.conError(this);
+                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else if (anEntity.equals("contact")) {
+            cDL = new ContactDL(c);
+            try {
+                TableParser.fillTable(cDL.fetchEntitiesR("Name ASC"), contactTable);
+            } catch (SQLException ex) {
+                MesDial.conError(this);
+                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else if (anEntity.equals("category")) {
+            catDL = new CategoryDL(c);
+            try {
+                TableParser.fillTable(catDL.fetchEntitiesR("Name ASC"), categoryTable);
+            } catch (SQLException ex) {
+                MesDial.conError(this);
+                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else if (anEntity.equals("tag")) {
+            tDL = new TagDL(c);
+            try {
+                TableParser.fillTable(tDL.fetchEntitiesR("Name ASC"), tagTable);
+            } catch (SQLException ex) {
+                MesDial.conError(this);
+                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    /**
+     * Checks and returns the id of a selected row. Returns -1 if anything goes
+     * wrong
+     *
+     * @param aTable
+     * @return
+     */
+    private int checkRowsAndGetID(JTable aTable) {
+        int anID = -1;
+
+        if (aTable.getSelectedRowCount() == 0) {
+            MesDial.noRowSelected(this);
+        } else if (aTable.getSelectedRowCount() > 1) {
+            MesDial.multipleRowsSelected(this);
+        } else {
+            try {
+                anID = Integer.parseInt((String) ((DefaultTableModel) aTable.getModel()).getValueAt(aTable.getSelectedRow(), 0));
+            } catch (Exception x) {
+                MesDial.programError(this);
+                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, x);
+            }
+        }
+        return anID;
     }
 
     /**
@@ -263,9 +339,21 @@ public class MainFrame extends GUI {
         jScrollPane4 = new javax.swing.JScrollPane();
         dayTable = new javax.swing.JTable();
         eventPanel = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        eventTable = new javax.swing.JTable();
         contactPanel = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        contactTable = new javax.swing.JTable();
         tagPanel = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        tagTable = new javax.swing.JTable();
         categoryPanel = new javax.swing.JPanel();
+        jPanel5 = new javax.swing.JPanel();
+        jScrollPane8 = new javax.swing.JScrollPane();
+        categoryTable = new javax.swing.JTable();
         jPanel9 = new javax.swing.JPanel();
         saveBtn = new javax.swing.JButton();
         refreshBtn = new javax.swing.JButton();
@@ -440,7 +528,7 @@ public class MainFrame extends GUI {
                 .addContainerGap()
                 .addComponent(dateL)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(sexChk)
@@ -504,16 +592,15 @@ public class MainFrame extends GUI {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 433, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 487, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -536,54 +623,190 @@ public class MainFrame extends GUI {
 
         tabbedPane.addTab("Days", dayPanel);
 
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Events"));
+
+        eventTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane5.setViewportView(eventTable);
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 487, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
         javax.swing.GroupLayout eventPanelLayout = new javax.swing.GroupLayout(eventPanel);
         eventPanel.setLayout(eventPanelLayout);
         eventPanelLayout.setHorizontalGroup(
             eventPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 560, Short.MAX_VALUE)
+            .addGroup(eventPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         eventPanelLayout.setVerticalGroup(
             eventPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 506, Short.MAX_VALUE)
+            .addGroup(eventPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         tabbedPane.addTab("Events", eventPanel);
+
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Contacts"));
+
+        contactTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane6.setViewportView(contactTable);
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 477, Short.MAX_VALUE)
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout contactPanelLayout = new javax.swing.GroupLayout(contactPanel);
         contactPanel.setLayout(contactPanelLayout);
         contactPanelLayout.setHorizontalGroup(
             contactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 560, Short.MAX_VALUE)
+            .addGroup(contactPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         contactPanelLayout.setVerticalGroup(
             contactPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 506, Short.MAX_VALUE)
+            .addGroup(contactPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         tabbedPane.addTab("Contacts", contactPanel);
+
+        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Tags"));
+
+        tagTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane7.setViewportView(tagTable);
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 487, Short.MAX_VALUE)
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout tagPanelLayout = new javax.swing.GroupLayout(tagPanel);
         tagPanel.setLayout(tagPanelLayout);
         tagPanelLayout.setHorizontalGroup(
             tagPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 560, Short.MAX_VALUE)
+            .addGroup(tagPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         tagPanelLayout.setVerticalGroup(
             tagPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 506, Short.MAX_VALUE)
+            .addGroup(tagPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         tabbedPane.addTab("Tags", tagPanel);
+
+        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Categories"));
+
+        categoryTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane8.setViewportView(categoryTable);
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 489, Short.MAX_VALUE)
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout categoryPanelLayout = new javax.swing.GroupLayout(categoryPanel);
         categoryPanel.setLayout(categoryPanelLayout);
         categoryPanelLayout.setHorizontalGroup(
             categoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 560, Short.MAX_VALUE)
+            .addGroup(categoryPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         categoryPanelLayout.setVerticalGroup(
             categoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 506, Short.MAX_VALUE)
+            .addGroup(categoryPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         tabbedPane.addTab("Categories", categoryPanel);
@@ -598,6 +821,11 @@ public class MainFrame extends GUI {
         });
 
         refreshBtn.setText("Refresh");
+        refreshBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                refreshBtnActionPerformed(evt);
+            }
+        });
 
         quitBtn.setText("Quit");
         quitBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -607,6 +835,11 @@ public class MainFrame extends GUI {
         });
 
         editBtn.setText("Edit");
+        editBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editBtnActionPerformed(evt);
+            }
+        });
 
         newBtn.setText("New");
         newBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -694,7 +927,7 @@ public class MainFrame extends GUI {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(tabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 543, Short.MAX_VALUE)
+                .addComponent(tabbedPane)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -746,7 +979,7 @@ public class MainFrame extends GUI {
         if (eventL.getSelectedValue() != null) {
             try {
                 int eventID = StrVal.parseIdFromString((String) eventL.getSelectedValue());
-                if (EventFrame.isInstanceAlive()) {
+                if (!EventFrame.isInstanceAlive()) {
                     new EventFrame(this, c, id, eventID);
                 }
             } catch (Exception x) {
@@ -760,7 +993,7 @@ public class MainFrame extends GUI {
         if (contactL.getSelectedValue() != null) {
             try {
                 int contactID = StrVal.parseIdFromString((String) contactL.getSelectedValue());
-                if (EventFrame.isInstanceAlive()) {
+                if (!EventFrame.isInstanceAlive()) {
                     new ContactFrame(this, c, contactID);
                 }
             } catch (Exception x) {
@@ -792,11 +1025,57 @@ public class MainFrame extends GUI {
         }
 
     }//GEN-LAST:event_newBtnActionPerformed
+
+    private void refreshBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshBtnActionPerformed
+        if (tabbedPane.getSelectedIndex() == 1) {
+            refresh("day");
+        } else if (tabbedPane.getSelectedIndex() == 2) {
+            refresh("event");
+        } else if (tabbedPane.getSelectedIndex() == 3) {
+            refresh("contact");
+        } else if (tabbedPane.getSelectedIndex() == 4) {
+            refresh("tag");
+        } else if (tabbedPane.getSelectedIndex() == 5) {
+            refresh("category");
+        }
+    }//GEN-LAST:event_refreshBtnActionPerformed
+
+    private void editBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editBtnActionPerformed
+        int entityID;
+        if (tabbedPane.getSelectedIndex() == 1) {
+            entityID = checkRowsAndGetID(dayTable);
+            if (entityID != -1 && !DayFrame.isInstanceAlive()) {
+                new DayFrame(this, c, entityID);
+            }
+        } else if (tabbedPane.getSelectedIndex() == 2) {
+            entityID = checkRowsAndGetID(eventTable);
+            if (entityID != -1 && !EventFrame.isInstanceAlive()) {
+                new EventFrame(this, c, id, entityID);
+            }
+        } else if (tabbedPane.getSelectedIndex() == 3) {
+            entityID = checkRowsAndGetID(contactTable);
+            if (entityID != -1 && !ContactFrame.isInstanceAlive()) {
+                new ContactFrame(this, c, entityID);
+            }
+        } else if (tabbedPane.getSelectedIndex() == 4) {
+            entityID = checkRowsAndGetID(tagTable);
+            if (entityID != -1 && !TagFrame.isInstanceAlive()) {
+                new TagFrame(this, c, entityID);
+            }
+        } else if (tabbedPane.getSelectedIndex() == 5) {
+            entityID = checkRowsAndGetID(categoryTable);
+            if (entityID != -1 && !CategoryFrame.isInstanceAlive()) {
+                new CategoryFrame(this, c, entityID);
+            }
+        }
+    }//GEN-LAST:event_editBtnActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox alcoholChk;
     private javax.swing.JPanel categoryPanel;
+    private javax.swing.JTable categoryTable;
     private javax.swing.JList contactL;
     private javax.swing.JPanel contactPanel;
+    private javax.swing.JTable contactTable;
     private javax.swing.JLabel dateL;
     private javax.swing.JPanel dayPanel;
     private javax.swing.JTable dayTable;
@@ -808,6 +1087,7 @@ public class MainFrame extends GUI {
     private javax.swing.JButton editEvBtn;
     private javax.swing.JList eventL;
     private javax.swing.JPanel eventPanel;
+    private javax.swing.JTable eventTable;
     private javax.swing.JTextField expensesF;
     private javax.swing.JCheckBox funChk;
     private javax.swing.JLabel jLabel2;
@@ -816,6 +1096,10 @@ public class MainFrame extends GUI {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
@@ -824,6 +1108,10 @@ public class MainFrame extends GUI {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JScrollPane jScrollPane7;
+    private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JButton newBtn;
     private javax.swing.JButton newConBtn;
     private javax.swing.JButton newEvBtn;
@@ -837,6 +1125,7 @@ public class MainFrame extends GUI {
     private javax.swing.JTextArea summaryArea;
     private javax.swing.JTabbedPane tabbedPane;
     private javax.swing.JPanel tagPanel;
+    private javax.swing.JTable tagTable;
     private javax.swing.JPanel todayPanel;
     private javax.swing.JCheckBox workChk;
     // End of variables declaration//GEN-END:variables

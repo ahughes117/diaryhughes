@@ -43,6 +43,7 @@ public class DayFrame extends GUI {
 
         if (anID != NIL) {
             try {
+                id = anID;
                 loadDay();
             } catch (SQLException ex) {
                 MesDial.conError(this);
@@ -128,7 +129,7 @@ public class DayFrame extends GUI {
         //creating the day object and inserting its id
         d = new Day();
         d.setDayID(id);
-        dDL = new DayDL(c);
+        dDL = new DayDL(c, d);
 
         //fetching day details
         d = (Day) dDL.fetchEntity();

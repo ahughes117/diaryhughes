@@ -40,8 +40,7 @@ public class EventFrame extends GUI {
 
         if (anID != NIL) {
             try {
-                e = new Event();
-                e.setEventID(anID);
+                id = anID;
                 loadEvent();
             } catch (SQLException ex) {
                 MesDial.conError(this);
@@ -81,6 +80,9 @@ public class EventFrame extends GUI {
     }
 
     private void loadEvent() throws SQLException {
+        e = new Event();
+        e.setEventID(id);
+        
         eDL = new EventDL(c, e);
         e = (Event) eDL.fetchEntity();
         

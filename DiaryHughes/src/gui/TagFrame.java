@@ -39,7 +39,7 @@ public class TagFrame extends GUI {
 
         if (anID != NIL) {
             try {
-                tag = new Tag();
+                id = anID;
                 loadTag();
             } catch (SQLException ex) {
                 MesDial.conError(this);

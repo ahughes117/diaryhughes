@@ -38,8 +38,7 @@ public class ContactFrame extends GUI {
 
         if (anID != NIL) {
             try {
-                contact = new Contact();
-                contact.setContactID(anID);
+                id = anID;
                 loadContact();
             } catch (SQLException ex) {
                 MesDial.conError(this);
@@ -81,6 +80,9 @@ public class ContactFrame extends GUI {
      * @throws SQLException
      */
     private void loadContact() throws SQLException {
+        contact = new Contact();
+        contact.setContactID(id);
+        
         conDL = new ContactDL(c, contact);
         contact = (Contact) conDL.fetchEntity();
 

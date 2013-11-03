@@ -38,8 +38,7 @@ public class CategoryFrame extends GUI {
 
         if (anID != NIL) {
             try {
-                cat = new Category();
-                cat.setCategoryID(anID);
+                id = anID;
                 loadCategory();
             } catch (SQLException ex) {
                 MesDial.conError(this);
@@ -77,6 +76,9 @@ public class CategoryFrame extends GUI {
      * @throws SQLException
      */
     private void loadCategory() throws SQLException {
+        cat = new Category();
+        cat.setCategoryID(id);
+        
         catDL = new CategoryDL(c, cat);
         cat = (Category) catDL.fetchEntity();
 
