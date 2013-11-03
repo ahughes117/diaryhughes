@@ -9,7 +9,7 @@ import javax.swing.JList;
  *
  * @author alexhughes
  */
-public class ListParser {
+public class ListUtil {
 
     /**
      * Receives a JList object and populates it with items from an Entity List.

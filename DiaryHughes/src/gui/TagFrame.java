@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import sql.Connector;
-import util.ListParser;
+import util.ListUtil;
 import util.MesDial;
 
 /**
@@ -65,6 +65,7 @@ public class TagFrame extends GUI {
         boolean parsingSuccessful = true;
 
         tag = new Tag();
+        
         if (existing) {
             tag.setTagID(id);
         }
@@ -103,7 +104,7 @@ public class TagFrame extends GUI {
         tag = (Tag) tagDL.fetchEntity();
 
         nameF.setText(tag.getName());
-        ListParser.fillList(tagDL.getTagEvents(tag.getTagID()), jList1);
+        ListUtil.fillList(tagDL.getTagEvents(tag.getTagID()), jList1);
 
         statusL.setText("Date Modified: " + tag.getDateModified());
     }
@@ -185,7 +186,7 @@ public class TagFrame extends GUI {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 304, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -198,7 +199,7 @@ public class TagFrame extends GUI {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE)
                 .addContainerGap())
         );
 

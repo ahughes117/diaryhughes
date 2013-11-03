@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
  *
  * @author Alex Hughes
  */
-public class StrVal {
+public class StrUtil {
 
     /**
      * This function removes all quotes characters(')

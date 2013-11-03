@@ -9,7 +9,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Alex Hughes
  */
-public class TableParser {
+public class TableUtil {
 
     private static final int idCol = 0;
     private static int cols;
@@ -49,7 +49,7 @@ public class TableParser {
                 if (metadata.getColumnName(i + 1).equals("DateCreated")
                         || metadata.getColumnName(i + 1).equals("_dateModified")) {
 
-                    rowData[i] = StrVal.formatTimestamp(results.getTimestamp(i + 1));
+                    rowData[i] = StrUtil.formatTimestamp(results.getTimestamp(i + 1));
                 } else {
                     rowData[i] = results.getString(i + 1);
                 }

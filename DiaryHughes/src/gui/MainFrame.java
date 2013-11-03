@@ -14,8 +14,8 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import sql.Connector;
 import util.MesDial;
-import util.StrVal;
-import util.TableParser;
+import util.StrUtil;
+import util.TableUtil;
 
 /**
  * The Main Frame of the application
@@ -84,7 +84,7 @@ public class MainFrame extends GUI {
         }
 
         try {
-            d.setDate(StrVal.dateParser(dateFormat.format(new java.util.Date())));
+            d.setDate(StrUtil.dateParser(dateFormat.format(new java.util.Date())));
         } catch (Exception ex) {
             parsingSuccessful = false;
             MesDial.dateError(this);
@@ -149,7 +149,7 @@ public class MainFrame extends GUI {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
         java.util.Date date = new java.util.Date();
-        java.sql.Date sqlDate = StrVal.dateParser(dateFormat.format(date));
+        java.sql.Date sqlDate = StrUtil.dateParser(dateFormat.format(date));
 
         //fetching day details
         d = dDL.fetchDayByDate(sqlDate);
@@ -212,7 +212,7 @@ public class MainFrame extends GUI {
 
     private void loadDayTable() throws SQLException {
         dDL = new DayDL(c);
-        TableParser.fillTable(null, dayTable);
+        TableUtil.fillTable(null, dayTable);
     }
 
     protected void shutdown() {
@@ -234,7 +234,7 @@ public class MainFrame extends GUI {
         if (anEntity.equals("day")) {
             dDL = new DayDL(c);
             try {
-                TableParser.fillTable(dDL.fetchEntitiesR("Date DESC"), dayTable);
+                TableUtil.fillTable(dDL.fetchEntitiesR("Date DESC"), dayTable);
             } catch (SQLException ex) {
                 MesDial.conError(this);
                 Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
@@ -242,7 +242,7 @@ public class MainFrame extends GUI {
         } else if (anEntity.equals("event")) {
             eDL = new EventDL(c);
             try {
-                TableParser.fillTable(eDL.fetchEntitiesR("_dateModified DESC"), eventTable);
+                TableUtil.fillTable(eDL.fetchEntitiesR("_dateModified DESC"), eventTable);
             } catch (SQLException ex) {
                 MesDial.conError(this);
                 Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
@@ -250,7 +250,7 @@ public class MainFrame extends GUI {
         } else if (anEntity.equals("contact")) {
             cDL = new ContactDL(c);
             try {
-                TableParser.fillTable(cDL.fetchEntitiesR("Name ASC"), contactTable);
+                TableUtil.fillTable(cDL.fetchEntitiesR("Name ASC"), contactTable);
             } catch (SQLException ex) {
                 MesDial.conError(this);
                 Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
@@ -258,7 +258,7 @@ public class MainFrame extends GUI {
         } else if (anEntity.equals("category")) {
             catDL = new CategoryDL(c);
             try {
-                TableParser.fillTable(catDL.fetchEntitiesR("Name ASC"), categoryTable);
+                TableUtil.fillTable(catDL.fetchEntitiesR("Name ASC"), categoryTable);
             } catch (SQLException ex) {
                 MesDial.conError(this);
                 Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
@@ -266,7 +266,7 @@ public class MainFrame extends GUI {
         } else if (anEntity.equals("tag")) {
             tDL = new TagDL(c);
             try {
-                TableParser.fillTable(tDL.fetchEntitiesR("Name ASC"), tagTable);
+                TableUtil.fillTable(tDL.fetchEntitiesR("Name ASC"), tagTable);
             } catch (SQLException ex) {
                 MesDial.conError(this);
                 Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
@@ -978,7 +978,7 @@ public class MainFrame extends GUI {
     private void editEvBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editEvBtnActionPerformed
         if (eventL.getSelectedValue() != null) {
             try {
-                int eventID = StrVal.parseIdFromString((String) eventL.getSelectedValue());
+                int eventID = StrUtil.parseIdFromString((String) eventL.getSelectedValue());
                 if (!EventFrame.isInstanceAlive()) {
                     new EventFrame(this, c, id, eventID);
                 }
@@ -992,7 +992,7 @@ public class MainFrame extends GUI {
     private void editConBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editConBtnActionPerformed
         if (contactL.getSelectedValue() != null) {
             try {
-                int contactID = StrVal.parseIdFromString((String) contactL.getSelectedValue());
+                int contactID = StrUtil.parseIdFromString((String) contactL.getSelectedValue());
                 if (!EventFrame.isInstanceAlive()) {
                     new ContactFrame(this, c, contactID);
                 }
@@ -1050,7 +1050,7 @@ public class MainFrame extends GUI {
         } else if (tabbedPane.getSelectedIndex() == 2) {
             entityID = checkRowsAndGetID(eventTable);
             if (entityID != -1 && !EventFrame.isInstanceAlive()) {
-                new EventFrame(this, c, id, entityID);
+                new EventFrame(this, c, entityID, NIL);
             }
         } else if (tabbedPane.getSelectedIndex() == 3) {
             entityID = checkRowsAndGetID(contactTable);

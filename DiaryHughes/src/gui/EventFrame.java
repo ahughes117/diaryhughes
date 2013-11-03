@@ -9,7 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import sql.Connector;
 import util.MesDial;
-import util.StrVal;
+import util.StrUtil;
 
 /**
  * Event Frame. CRUD for Event Entity
@@ -28,7 +28,6 @@ public class EventFrame extends GUI {
      */
     public EventFrame(GUI aPFrame, Connector aConnector, int anID, int aDayID) {
         super(aPFrame, aConnector, anID);
-        dayID = aDayID;
         instanceAlive = true;
 
         initComponents();
@@ -42,6 +41,7 @@ public class EventFrame extends GUI {
             try {
                 id = anID;
                 loadEvent();
+                dayID = e.getDayID();
             } catch (SQLException ex) {
                 MesDial.conError(this);
                 Logger.getLogger(EventFrame.class.getName()).log(Level.SEVERE, null, ex);
@@ -49,6 +49,7 @@ public class EventFrame extends GUI {
             }
             existing = true;
         } else {
+            dayID = aDayID;
             existing = false;
             statusL.setText("New Event");
         }
@@ -62,13 +63,17 @@ public class EventFrame extends GUI {
 
         e = new Event();
         
+        if(existing) {
+            e.setEventID(id);
+        }
+        
         e.setDayID(dayID);
         e.setName(nameF.getText());
         e.setDesc(descArea.getText());
 
         if (!timeF.getText().equals("")) {
             try {
-                e.setTime(StrVal.timeParser(timeF.getText()));
+                e.setTime(StrUtil.timeParser(timeF.getText()));
             } catch (Exception ex) {
                 parsingSuccessful = false;
                 MesDial.timeError(this);

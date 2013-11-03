@@ -65,6 +65,10 @@ public class ContactFrame extends GUI {
 
         contact = new Contact();
 
+        if(existing) {
+            contact.setContactID(id);
+        }
+        
         contact.setName(nameF.getText());
         contact.setSurname(surnameF.getText());
         contact.setEmail(emailF.getText());

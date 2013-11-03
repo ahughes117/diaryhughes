@@ -14,7 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import sql.Connector;
 import util.MesDial;
-import util.StrVal;
+import util.StrUtil;
 
 /**
  * Day Frame. CRUD for Day Entity
@@ -63,9 +63,13 @@ public class DayFrame extends GUI {
     private boolean parseDay() {
         boolean parsingSuccessful = true;
         d = new Day();
+        
+        if(existing) {
+            d.setDayID(id);
+        }
 
         try {
-            d.setDate(StrVal.dateParser(dateF.getText()));
+            d.setDate(StrUtil.dateParser(dateF.getText()));
         } catch (Exception ex) {
             parsingSuccessful = false;
             MesDial.dateError(this);
@@ -168,6 +172,7 @@ public class DayFrame extends GUI {
                 id = dDL.insertEntity();
                 existing = true;
             } else {
+                
                 dDL.updateEntity();
             }
             MesDial.saveSuccess(this);
