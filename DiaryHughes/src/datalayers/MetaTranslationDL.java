@@ -71,4 +71,19 @@ public class MetaTranslationDL extends DataLayer {
         }
         return entities;
     }
+
+    @Override
+    public ResultSet fetchEntitiesR(String aSorting) throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ResultSet searchEntityR() throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    protected String buildSearchQuery() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

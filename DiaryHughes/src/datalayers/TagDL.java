@@ -55,7 +55,32 @@ public class TagDL extends DataLayer {
     }
 
     @Override
+    public ResultSet fetchEntitiesR(String aSorting) throws SQLException {
+        String query = ""
+                + "SELECT * "
+                + "FROM tag "
+                + "ORDER BY " + aSorting;
+
+        ResultSet tagR = c.sendQuery(query);
+        return tagR;
+    }
+
+    @Override
     public ArrayList<Entity> searchEntity() throws SQLException {
+        ResultSet tagR = c.sendQuery(buildSearchQuery());
+        entities = resultSetToEntity(tagR);
+
+        return entities;
+    }
+    
+    @Override
+    public ResultSet searchEntityR() throws SQLException {
+        ResultSet tagR = c.sendQuery(buildSearchQuery());
+        return tagR;
+    }
+    
+    @Override
+    protected String buildSearchQuery() {
         Tag tag = (Tag) e;
 
         String query = ""
@@ -70,11 +95,7 @@ public class TagDL extends DataLayer {
         if (tag.getDateModified() != null) {
             query += " AND _dateModified LIKE '" + tag.getDateModified() + "%' ";
         }
-
-        ResultSet tagR = c.sendQuery(query);
-        entities = resultSetToEntity(tagR);
-
-        return entities;
+        return query;
     }
 
     @Override
@@ -178,10 +199,10 @@ public class TagDL extends DataLayer {
 
     /**
      * Returns the events correlated to a tag
-     * 
+     *
      * @param aTagID
      * @return
-     * @throws SQLException 
+     * @throws SQLException
      */
     public ArrayList<Entity> getTagEvents(int aTagID) throws SQLException {
         ArrayList<Entity> events = new ArrayList();
@@ -203,7 +224,7 @@ public class TagDL extends DataLayer {
             event.setName(resultR.getString("Name"));
             events.add(event);
         }
-        
+
         return events;
     }
 

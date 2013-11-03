@@ -67,15 +67,41 @@ public class EventDL extends DataLayer {
     }
 
     @Override
+    public ResultSet fetchEntitiesR(String aSorting) throws SQLException {
+        String query = ""
+                + "SELECT * "
+                + "FROM event "
+                + "ORDERY BY " + aSorting;
+
+        ResultSet eventR = c.sendQuery(query);
+
+        return eventR;
+    }
+
+    @Override
     public ArrayList<Entity> searchEntity() throws SQLException {
+        ResultSet eventR = c.sendQuery(buildSearchQuery());
+        entities = resultSetToEntity(eventR);
+
+        return entities;
+    }
+    
+    @Override
+    public ResultSet searchEntityR() throws SQLException {
+        ResultSet eventR = c.sendQuery(buildSearchQuery());
+        return eventR;
+    }
+
+    @Override
+    protected String buildSearchQuery() {
         Event event = (Event) e;
         Tag tag;
-        if(event.getTags() != null && !event.getTags().isEmpty()) {
+
+        if (event.getTags() != null && !event.getTags().isEmpty()) {
             tag = event.getTags().get(0);
         } else {
             tag = new Tag();
         }
-            
 
         String query = ""
                 + "SELECT * "
@@ -85,7 +111,7 @@ public class EventDL extends DataLayer {
                 + "INNER JOIN tag t ON et.tagID = t.tagID "
                 + "WHERE 1=1 ";
 
-        if (event.getCategory() != null && event.getCategory().getName() != null 
+        if (event.getCategory() != null && event.getCategory().getName() != null
                 && !event.getCategory().getName().equals("")) {
             query += " AND c.Name LIKE '%" + event.getCategory().getName() + "%' ";
         }
@@ -108,10 +134,7 @@ public class EventDL extends DataLayer {
 
         query += " GROUP BY e.eventID ";
 
-        ResultSet eventR = c.sendQuery(query);
-        entities = resultSetToEntity(eventR);
-
-        return entities;
+        return query;
     }
 
     @Override
@@ -233,7 +256,7 @@ public class EventDL extends DataLayer {
         Event ev = new Event();
         ev.setDayID(aDayID);
         e = ev;
-        
+
         ArrayList<Entity> entityL = searchEntity();
 
         //stupid but the only easy way to do it

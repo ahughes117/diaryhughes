@@ -17,6 +17,7 @@ import sql.Connector;
 import util.ListParser;
 import util.MesDial;
 import util.StrVal;
+import util.TableParser;
 
 /**
  * The Main Frame of the application
@@ -205,7 +206,11 @@ public class MainFrame extends GUI {
                 MesDial.saveSuccess(this);
             }
         }
-
+    }
+    
+    private void loadDayTable() throws SQLException {
+        dDL = new DayDL(c);
+        TableParser.fillTable(null, dayTable);
     }
 
     protected void shutdown() {
@@ -254,6 +259,9 @@ public class MainFrame extends GUI {
         expensesF = new javax.swing.JTextField();
         practiceChk = new javax.swing.JCheckBox();
         dayPanel = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        dayTable = new javax.swing.JTable();
         eventPanel = new javax.swing.JPanel();
         contactPanel = new javax.swing.JPanel();
         tagPanel = new javax.swing.JPanel();
@@ -432,7 +440,7 @@ public class MainFrame extends GUI {
                 .addContainerGap()
                 .addComponent(dateL)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(sexChk)
@@ -480,15 +488,50 @@ public class MainFrame extends GUI {
 
         tabbedPane.addTab("Today", todayPanel);
 
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Days"));
+
+        dayTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane4.setViewportView(dayTable);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 433, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
         javax.swing.GroupLayout dayPanelLayout = new javax.swing.GroupLayout(dayPanel);
         dayPanel.setLayout(dayPanelLayout);
         dayPanelLayout.setHorizontalGroup(
             dayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 560, Short.MAX_VALUE)
+            .addGroup(dayPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         dayPanelLayout.setVerticalGroup(
             dayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 506, Short.MAX_VALUE)
+            .addGroup(dayPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         tabbedPane.addTab("Days", dayPanel);
@@ -651,7 +694,7 @@ public class MainFrame extends GUI {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(tabbedPane)
+                .addComponent(tabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 543, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -756,6 +799,7 @@ public class MainFrame extends GUI {
     private javax.swing.JPanel contactPanel;
     private javax.swing.JLabel dateL;
     private javax.swing.JPanel dayPanel;
+    private javax.swing.JTable dayTable;
     private javax.swing.JButton deleteBtn;
     private javax.swing.JButton deleteConBtn;
     private javax.swing.JButton deleteEvBtn;
@@ -770,6 +814,7 @@ public class MainFrame extends GUI {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
@@ -778,6 +823,7 @@ public class MainFrame extends GUI {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JButton newBtn;
     private javax.swing.JButton newConBtn;
     private javax.swing.JButton newEvBtn;

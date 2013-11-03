@@ -55,7 +55,32 @@ public class CategoryDL extends DataLayer {
     }
 
     @Override
+    public ResultSet fetchEntitiesR(String aSorting) throws SQLException {
+        String query = ""
+                + "SELECT * "
+                + "FROM category "
+                + "ORDER BY " + aSorting;
+
+        ResultSet catR = c.sendQuery(query);
+        return catR;
+    }
+
+    @Override
     public ArrayList<Entity> searchEntity() throws SQLException {
+        ResultSet catR = c.sendQuery(buildSearchQuery());
+        entities = resultSetToEntity(catR);
+
+        return entities;
+    }
+
+    @Override
+    public ResultSet searchEntityR() throws SQLException {
+        ResultSet catR = c.sendQuery(buildSearchQuery());
+        return catR;
+    }
+
+    @Override
+    protected String buildSearchQuery() {
         Category cat = (Category) e;
 
         String query = ""
@@ -79,10 +104,7 @@ public class CategoryDL extends DataLayer {
             query += " AND _dateModified LIKE '" + cat.getDateModified() + "%' ";
         }
 
-        ResultSet catR = c.sendQuery(query);
-        entities = resultSetToEntity(catR);
-
-        return entities;
+        return query;
     }
 
     @Override

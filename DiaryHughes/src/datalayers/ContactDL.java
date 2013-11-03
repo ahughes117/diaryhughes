@@ -54,6 +54,17 @@ public class ContactDL extends DataLayer {
         return entities;
     }
 
+    @Override
+    public ResultSet fetchEntitiesR(String aSorting) throws SQLException {
+        String query = ""
+                + "SELECT * "
+                + "FROM contact "
+                + "ORDER BY " + aSorting;
+
+        ResultSet contactR = c.sendQuery(query);
+        return contactR;
+    }
+
     public ArrayList<Contact> getDayContacts(int aDayID) throws SQLException {
         ArrayList<Contact> contactL = new ArrayList();
         Contact con = new Contact();
@@ -72,6 +83,20 @@ public class ContactDL extends DataLayer {
 
     @Override
     public ArrayList<Entity> searchEntity() throws SQLException {
+        ResultSet contactR = c.sendQuery(buildSearchQuery());
+        entities = resultSetToEntity(contactR);
+
+        return entities;
+    }
+
+    @Override
+    public ResultSet searchEntityR() throws SQLException {
+        ResultSet contactR = c.sendQuery(buildSearchQuery());
+        return contactR;
+    }
+
+    @Override
+    protected String buildSearchQuery() {
         Contact con = (Contact) e;
 
         String query = ""
@@ -107,11 +132,7 @@ public class ContactDL extends DataLayer {
         if (con.getDayID() != Entity.NIL) {
             query += " AND dc.dayID = " + con.getDayID();
         }
-
-        ResultSet contactR = c.sendQuery(query);
-        entities = resultSetToEntity(contactR);
-
-        return entities;
+        return query;
     }
 
     @Override

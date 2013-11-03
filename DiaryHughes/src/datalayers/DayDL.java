@@ -110,7 +110,37 @@ public class DayDL extends DataLayer {
     }
 
     @Override
+    public ResultSet fetchEntitiesR(String aSorting) throws SQLException {
+        String query = ""
+                + "SELECT * "
+                + "FROM day "
+                + "ORDER BY " + aSorting;
+
+        ResultSet dayR = c.sendQuery(query);
+        return dayR;
+    }
+
+    @Override
     public ArrayList<Entity> searchEntity() throws SQLException {
+        ResultSet dayR = c.sendQuery(buildSearchQuery());
+        entities = resultSetToEntity(dayR);
+
+        return entities;
+    }
+    
+    @Override
+    public ResultSet searchEntityR() throws SQLException {
+        ResultSet dayR = c.sendQuery(buildSearchQuery());
+        return dayR;
+    }
+
+    /**
+     * Builds the search query
+     * 
+     * @return 
+     */
+    @Override
+    protected String buildSearchQuery() {
         Day d = (Day) e;
 
         String query = ""
@@ -192,10 +222,7 @@ public class DayDL extends DataLayer {
 
         query += " GROUP BY d.dayID ";
 
-        ResultSet dayR = c.sendQuery(query);
-        entities = resultSetToEntity(dayR);
-
-        return entities;
+        return query;
     }
 
     @Override
