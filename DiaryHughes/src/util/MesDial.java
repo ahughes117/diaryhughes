@@ -40,6 +40,7 @@ public class MesDial {
     private static String dateError = "Please, enter a date in a valid format (30/12/2013)";
     private static String doubleError = "Please, enter a valid decimal number. (1.17)";
     private static String tagExistsError = "This tag already exists.";
+    private static String categoryError = "You have to choose a category.";
     
     //
     private static String deleteQuestion = "Delete?";
@@ -207,5 +208,9 @@ public class MesDial {
     
     public static void tagExistsError(GUI aFrame) {
         JOptionPane.showMessageDialog(aFrame, tagExistsError, "Error!", JOptionPane.ERROR_MESSAGE);
+    }
+    
+    public static void categoryError(GUI aFrame) {
+        JOptionPane.showMessageDialog(aFrame, categoryError, "Error!", JOptionPane.ERROR_MESSAGE);
     }
 }

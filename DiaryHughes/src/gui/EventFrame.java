@@ -1,6 +1,6 @@
 package gui;
 
-import datalayers.EventDL;
+import datalayers.*;
 import entities.Event;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import sql.Connector;
+import util.ComboUtil;
 import util.MesDial;
 import util.StrUtil;
 
@@ -22,6 +23,8 @@ public class EventFrame extends GUI {
     private int dayID;
     private Event e;
     private EventDL eDL;
+    private TagDL tagDL;
+    private CategoryDL catDL;
 
     /**
      * Constructor for EventFrame
@@ -62,14 +65,20 @@ public class EventFrame extends GUI {
         boolean parsingSuccessful = true;
 
         e = new Event();
-        
-        if(existing) {
+
+        if (existing) {
             e.setEventID(id);
         }
-        
+
         e.setDayID(dayID);
         e.setName(nameF.getText());
         e.setDesc(descArea.getText());
+
+        if (catCombo.getSelectedIndex() != -1) {
+            e.setCategoryID(StrUtil.parseIdFromString((String) catCombo.getSelectedItem()));
+        } else {
+            MesDial.categoryError(this);
+        }
 
         if (!timeF.getText().equals("")) {
             try {
@@ -87,14 +96,15 @@ public class EventFrame extends GUI {
     private void loadEvent() throws SQLException {
         e = new Event();
         e.setEventID(id);
-        
+
         eDL = new EventDL(c, e);
         e = (Event) eDL.fetchEntity();
-        
+
         dayID = e.getDayID();
         nameF.setText(e.getName());
         timeF.setText(e.getTime().toString());
         descArea.setText(e.getDesc());
+        loadCatCombo();
 
         if (e.getDateCreated().equals(e.getDateModified())) {
             statusL.setText("Date Created: " + e.getDateCreated().toString());
@@ -114,6 +124,29 @@ public class EventFrame extends GUI {
                 existing = true;
             } else {
                 eDL.updateEntity();
+            }
+        }
+    }
+
+    /**
+     * Loads the category combo
+     */
+    private void loadCatCombo() {
+        catDL = new CategoryDL(c);
+
+        try {
+            ComboUtil.fillCombo(catDL.fetchEntities("categoryID ASC"), catCombo);
+        } catch (SQLException ex) {
+            MesDial.conError(this);
+            Logger.getLogger(EventFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        if (existing) {
+            for (int i = 0; i < catCombo.getItemCount(); i++) {
+                if (StrUtil.parseIdFromString((String) catCombo.getItemAt(i)) == e.getCategoryID()) {
+                    catCombo.setSelectedIndex(i);
+                    break;
+                }
             }
         }
     }
