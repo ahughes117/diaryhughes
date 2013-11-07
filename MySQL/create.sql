@@ -2,9 +2,9 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
-DROP SCHEMA IF EXISTS `diaryhughes`;
-CREATE SCHEMA `diaryhughes`;
-USE `diaryhughes`;
+DROP SCHEMA IF EXISTS `diaryhughes` ;
+CREATE SCHEMA IF NOT EXISTS `diaryhughes` DEFAULT CHARACTER SET utf8 ;
+USE `diaryhughes` ;
 
 -- -----------------------------------------------------
 -- Table `contact`
@@ -102,7 +102,7 @@ CREATE TABLE IF NOT EXISTS `event` (
   `dayID` INT NOT NULL,
   `categoryID` INT NULL,
   `Name` VARCHAR(45) NULL,
-  `Description` TEXT NULL DEFAULT NULL,
+  `Desc` TEXT NULL DEFAULT NULL,
   `Time` TIME NULL DEFAULT NULL,
   `Picture` TEXT NULL,
   `DateCreated` TIMESTAMP NULL,

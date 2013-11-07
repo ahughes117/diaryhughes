@@ -93,7 +93,7 @@ public class CategoryDL extends DataLayer {
         }
 
         if (cat.getDesc() != null && !cat.getDesc().equals("")) {
-            query += " AND Desc LIKE '%" + cat.getDesc() + "%' ";
+            query += " AND `Desc` LIKE '%" + cat.getDesc() + "%' ";
         }
 
         if (cat.getDateCreated() != null) {
@@ -113,7 +113,7 @@ public class CategoryDL extends DataLayer {
         Category cat = (Category) e;
 
         String query = ""
-                + "INSERT INTO category (Name, Desc, DateCreated) VALUES "
+                + "INSERT INTO category (Name, `Desc`, DateCreated) VALUES "
                 + "(?, ?, CURRENT_TIMESTAMP) ";
 
         PreparedStatement ps = c.prepareStatement(query);
@@ -138,7 +138,7 @@ public class CategoryDL extends DataLayer {
 
         String query = ""
                 + "UPDATE category "
-                + "SET Name = ?, Desc = ? "
+                + "SET Name = ?, `Desc` = ? "
                 + "WHERE categoryID = ? ";
 
         PreparedStatement ps = c.prepareStatement(query);
@@ -168,6 +168,7 @@ public class CategoryDL extends DataLayer {
 
     @Override
     protected ArrayList<Entity> resultSetToEntity(ResultSet aR) throws SQLException {
+        entities = new ArrayList();
         Category cat;
 
         while (aR.next()) {

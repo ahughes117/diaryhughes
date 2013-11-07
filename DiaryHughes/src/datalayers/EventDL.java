@@ -117,7 +117,7 @@ public class EventDL extends DataLayer {
         }
 
         if (event.getDesc() != null && !event.getDesc().equals("")) {
-            query += " AND e.Desc LIKE '%" + event.getDesc() + "%' ";
+            query += " AND e.`Desc` LIKE '%" + event.getDesc() + "%' ";
         }
 
         if (event.getTime() != null) {
@@ -143,7 +143,7 @@ public class EventDL extends DataLayer {
         Event ev = (Event) e;
 
         String query = ""
-                + "INSERT INTO event (dayID, categoryID, Name, Description, Time, Picture, DateCreated) VALUES "
+                + "INSERT INTO event (dayID, categoryID, Name, `Desc`, Time, Picture, DateCreated) VALUES "
                 + "(?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP) ";
 
         PreparedStatement ps = c.prepareStatement(query);
@@ -178,7 +178,7 @@ public class EventDL extends DataLayer {
                 + "dayID = ? ,"
                 + "categoryID = ? ,"
                 + "Name = ? ,"
-                + "Description = ? ,"
+                + "`Desc` = ? ,"
                 + "Time = ? ,"
                 + "Picture = ? "
                 + "WHERE eventID = ? ";
@@ -226,7 +226,7 @@ public class EventDL extends DataLayer {
                     aR.getInt("dayID"),
                     aR.getInt("categoryID"),
                     aR.getString("Name"),
-                    aR.getString("Description"),
+                    aR.getString("`Desc`"),
                     aR.getTime("Time"),
                     aR.getString("Picture"),
                     aR.getTimestamp("DateCreated"),

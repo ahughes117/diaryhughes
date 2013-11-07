@@ -107,7 +107,7 @@ public class CategoryFrame extends GUI {
             catDL = new CategoryDL(c, cat);
 
             if (!existing) {
-                catDL.insertEntity();
+                id = catDL.insertEntity();
                 existing = true;
             } else {
                 catDL.updateEntity();
@@ -271,6 +271,7 @@ public class CategoryFrame extends GUI {
     private void okBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okBtnActionPerformed
         try {
             save();
+            MesDial.saveSuccess(this);
         } catch (SQLException ex) {
             MesDial.conError(this);
             Logger.getLogger(CategoryFrame.class.getName()).log(Level.SEVERE, null, ex);
