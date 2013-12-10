@@ -206,7 +206,9 @@ public class EventFrame extends GUI {
         jScrollPane1.setBorder(javax.swing.BorderFactory.createTitledBorder("Description"));
 
         descArea.setColumns(20);
+        descArea.setLineWrap(true);
         descArea.setRows(5);
+        descArea.setWrapStyleWord(true);
         jScrollPane1.setViewportView(descArea);
 
         jLabel4.setText("Name:");
@@ -290,7 +292,7 @@ public class EventFrame extends GUI {
 
         jPanel3.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
-        statusL.setText("null");
+        statusL.setText(null);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);

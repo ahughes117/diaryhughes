@@ -155,7 +155,9 @@ public class CategoryFrame extends GUI {
         jScrollPane1.setBorder(javax.swing.BorderFactory.createTitledBorder("Description"));
 
         descArea.setColumns(20);
+        descArea.setLineWrap(true);
         descArea.setRows(5);
+        descArea.setWrapStyleWord(true);
         jScrollPane1.setViewportView(descArea);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
