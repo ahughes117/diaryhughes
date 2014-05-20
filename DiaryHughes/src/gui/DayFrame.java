@@ -232,7 +232,7 @@ public class DayFrame extends GUI {
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Day");
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Contact"));
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Day"));
 
         jLabel3.setText("Date:");
 
@@ -354,7 +354,7 @@ public class DayFrame extends GUI {
 
         jPanel4.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
-        statusL.setText(null);
+        statusL.setText("null");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
